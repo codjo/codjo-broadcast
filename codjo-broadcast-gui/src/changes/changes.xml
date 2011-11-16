@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+    <properties>
+        <title>Changes</title>
+    </properties>
+    <body>
+        <release version="5.08" date="2007-04-17" description="Evolution">
+            <action dev="galaber" type="add">
+               Ajout d'un tri des préférences IHM.
+            </action>
+        </release>
+        <release version="5.07" date="2007-03-19" description="Evolution">
+            <action dev="galaber,cassagc" type="add">
+               Ajout de splitPanes et de boutons excell dans les écrans de paramétrage.
+            </action>
+        </release>
+        <release version="5.06" date="2006-07-06" description="Ajout">
+            <action dev="poucher" type="add">
+               Ajout des IHMs pour le client serveur.
+            </action>
+        </release>
+        <release version="5.04" date="2005-10-10" description="Ajout">
+            <action dev="guillie" type="add">
+               Modification du wizard d'export (ouverture des steps).
+            </action>
+        </release>
+        <release version="5.01" date="2004-10-27" description="Correction">
+            <action dev="rivierv" type="fix">
+               Correction sur l'IHM des exports qui ne s'ouvrait plus.
+            </action>
+        </release>
+        <release version="4.01" date="2003-11-03" description="Correction mineur">
+            <action dev="gonnot" type="fix">
+                Corrections mineures.
+            </action>
+            <action dev="gonnot" type="fix">
+                Correction pour tenir a compte la mise à jours de trigger 1.05-SNAPSHOT.
+            </action>
+        </release>
+        <release version="4.00" date="2003-06-18" description="Stabilisation">
+            <action dev="gonnot" type="fix">
+                Mavenisation de la librairie avec changement de nom.
+            </action>
+            <action dev="gonnot" type="fix">
+                Stabilisation des SNAPSHOT.
+            </action>
+        </release>
+    </body>
+</document>

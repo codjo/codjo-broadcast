@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+     | POM Relationships
+     -->
+
+    <parent>
+        <groupId>net.codjo.pom</groupId>
+        <artifactId>codjo-pom-library</artifactId>
+        <version>SNAPSHOT</version>
+    </parent>
+    <groupId>net.codjo.broadcast</groupId>
+    <artifactId>codjo-broadcast</artifactId>
+    <version>6.50-SNAPSHOT</version>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>net.codjo.broadcast</groupId>
+                <artifactId>codjo-broadcast-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.codjo.broadcast</groupId>
+                <artifactId>codjo-broadcast-common</artifactId>
+                <version>${project.version}</version>
+                <classifier>tests</classifier>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.codjo.broadcast</groupId>
+                <artifactId>codjo-broadcast-gui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.codjo.broadcast</groupId>
+                <artifactId>codjo-broadcast-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.codjo.test</groupId>
+            <artifactId>codjo-test-common</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!--
+     | Build Settings
+     -->
+
+    <packaging>pom</packaging>
+    <modules>
+        <module>codjo-broadcast-common</module>
+        <module>codjo-broadcast-gui</module>
+        <module>codjo-broadcast-batch</module>
+        <module>codjo-broadcast-server</module>
+        <module>codjo-broadcast-release-test</module>
+    </modules>
+
+    <!--
+    | Project Information
+    -->
+
+    <name>Lib &gt; Broadcast</name>
+    <description>Regroupement des differentes librairies permettant de faire des exports.</description>
+    <inceptionYear>2003</inceptionYear>
+
+    <!--
+    | Environment Information
+    -->
+
+    <scm>
+        <connection>scm:git:https://github.com/codjo/codjo-broadcast.git</connection>
+        <developerConnection>scm:git:https://github.com/codjo/codjo-broadcast.git</developerConnection>
+        <url>https://github.com/codjo/codjo-broadcast</url>
+    </scm>
+
+</project>

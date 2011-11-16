@@ -1,0 +1,32 @@
+net.codjo.broadcast.gui
+	-> net.codjo.i18n.common
+	-> net.codjo.mad.gui.i18n
+	-> net.codjo.mad.client.request
+	-> net.codjo.mad.common.structure
+	-> net.codjo.mad.gui.framework
+	-> net.codjo.mad.gui.request
+	-> net.codjo.mad.gui.request.factory
+	-> net.codjo.mad.gui.util
+	-> net.codjo.security.common.api
+	-> net.codjo.test.common
+	-> org.uispec4j
+	-> org.uispec4j.assertion
+
+net.codjo.broadcast.gui.plugin
+	-> net.codjo.broadcast.gui
+	-> net.codjo.mad.client.plugin
+	-> net.codjo.mad.gui.base
+	-> net.codjo.mad.gui.framework
+	-> net.codjo.mad.gui.plugin
+	-> net.codjo.mad.gui.request
+	-> net.codjo.test.common
+	-> net.codjo.workflow.gui.plugin
+
+net.codjo.broadcast.gui.wizard
+	-> net.codjo.broadcast.gui
+	-> net.codjo.gui.toolkit.wizard
+	-> net.codjo.mad.client.request
+	-> net.codjo.test.common
+	-> net.codjo.workflow.gui.wizard
+	-> org.uispec4j
+	-> org.uispec4j.assertion

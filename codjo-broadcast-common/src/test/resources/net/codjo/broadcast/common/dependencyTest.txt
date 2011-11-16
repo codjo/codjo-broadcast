@@ -1,0 +1,22 @@
+net.codjo.broadcast.common
+	-> net.codjo.broadcast.common.columns
+	-> net.codjo.broadcast.common.computed
+	-> net.codjo.broadcast.common.diffuser
+	-> net.codjo.sql.builder
+	-> net.codjo.test.common
+	-> net.codjo.test.common.mock
+net.codjo.broadcast.common.columns
+	-> net.codjo.sql.builder
+	-> fakedb
+net.codjo.broadcast.common.computed
+	-> net.codjo.broadcast.common
+	-> net.codjo.database.common.api
+	-> net.codjo.database.common.api.structure
+	-> net.codjo.tokio
+	-> fakedb
+net.codjo.broadcast.common.diffuser
+net.codjo.broadcast.common.message
+	-> net.codjo.workflow.common.message
+net.codjo.broadcast.common.util
+	-> net.codjo.test.common
+	-> jdepend.framework

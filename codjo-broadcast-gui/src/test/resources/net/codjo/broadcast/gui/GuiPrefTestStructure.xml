@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<structure>
+    <table type="data" label="Table sans referentiel" sql="AP_DIVIDEND">
+        <field label="Z Code portefeuille" sql="PORTFOLIO_CODE"/>
+        <field label="Commentaire de fiche" sql="COMMENT"/>
+    </table>
+    <table type="data" label="Avec referentiel" sql="AP_LEGAL">
+        <field label="Code portefeuille" sql="PORTFOLIO"/>
+        <field label="souscripteur" sql="SUBSCRIBER" referential="Referential"/>
+        <field label="utilisateur" sql="USER" referential="Person"/>
+    </table>
+    <table type="data" label="AP_PORTFOLIO_CODIFICATION" sql="AP_PORTFOLIO_CODIFICATION"/>
+    <table type="data" label="AP_FUND_PRICE" sql="AP_FUND_PRICE"/>
+    <table type="data" label="AP_COMMERCIAL" sql="AP_COMMERCIAL"/>
+    <table type="data" label="AP_VALUATION_TYPE" sql="AP_VALUATION_TYPE"/>
+    <table type="data" label="AP_REPORTING" sql="AP_REPORTING"/>
+    <table type="characteristic" label="AP_PORTFOLIO" sql="AP_PORTFOLIO"/>
+    <table type="characteristic" label="AP_MANAGEMENT" sql="AP_MANAGEMENT"/>
+    <table type="characteristic" label="AP_BENCHMARK" sql="AP_BENCHMARK"/>
+
+</structure>

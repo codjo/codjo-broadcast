@@ -1,0 +1,39 @@
+net.codjo.broadcast.server
+	-> net.codjo.broadcast.common
+	-> net.codjo.broadcast.common.columns
+	-> net.codjo.broadcast.common.computed
+	-> net.codjo.broadcast.common.diffuser
+	-> net.codjo.broadcast.server.api
+	-> net.codjo.database.common.api
+	-> net.codjo.database.common.impl.sqlfield
+	-> net.codjo.sql.builder
+	-> net.codjo.util.file
+	-> net.codjo.variable
+
+net.codjo.broadcast.server.api
+	-> net.codjo.broadcast.common
+	-> net.codjo.util.file
+
+net.codjo.broadcast.server.audit
+	-> net.codjo.broadcast.common.message
+	-> net.codjo.workflow.common.message
+	-> net.codjo.workflow.server.plugin
+
+net.codjo.broadcast.server.plugin
+	-> net.codjo.agent
+	-> net.codjo.broadcast.common
+	-> net.codjo.broadcast.common.diffuser
+	-> net.codjo.broadcast.common.message
+	-> net.codjo.broadcast.server
+	-> net.codjo.broadcast.server.api
+    -> net.codjo.broadcast.server.audit
+	-> net.codjo.plugin.server
+	-> net.codjo.sql.server
+	-> net.codjo.workflow.common.message
+	-> net.codjo.workflow.common.protocol
+	-> net.codjo.workflow.server.api
+	-> net.codjo.workflow.server.plugin
+
+net.codjo.broadcast.server.selector
+	-> net.codjo.broadcast.common
+	-> net.codjo.broadcast.server

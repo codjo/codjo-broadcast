@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+
+    <properties>
+        <title>agf-broadcast-gui</title>
+    </properties>
+
+    <body>
+        <section name="Export">
+            <p>
+                Librairie responsable des IHM des exports
+            </p>
+            <subsection name="Packages">
+                <p>
+                    Description rapide des packages de cette librairie.
+                </p>
+                <table>
+                    <tr>
+                        <th>Package</th>
+                        <th>Commentaire</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="./apidocs/net/codjo/broadcast/gui/package-summary.html">
+                                gui
+                            </a>
+                        </td>
+                        <td>
+                            Noyau des IHM.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="./apidocs/net/codjo/broadcast/gui/jdbc/package-summary.html">
+                                gui.jdbc
+                            </a>
+                        </td>
+                        <td>
+                            Definition du noyau IHM pour les applications client/serveur.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="./apidocs/net/codjo/broadcast/gui/wizard/package-summary.html">
+                                gui.wizard
+                            </a>
+                        </td>
+                        <td>
+                            Definition du wizard permettant de faire un export à la demande.
+                        </td>
+                    </tr>
+                </table>
+            </subsection>
+        </section>
+        <section name="Configuration de l'export à la demande">
+            <p>
+                Les propriétés suivantes doivent être configurés dans le JNLP de lancement :
+                <ul>
+                    <li>
+                        <code>broadcast.vtom</code>
+                        <br>
+                            contient le nom du fichier Batch de l'
+                            <i>export à la demande</i>
+                            (exemple : L:/pims/batch/exportAlaDemande.bat). Ce script doit
+                            accepter comme arguments :
+                        </br>
+                    </li>
+                    <ol>
+                        <li> &lt;initiateur&gt; : l'utilisateur demandant l'import</li>
+                        <li> &lt;fileName&gt; : le nom du fichier à exporter</li>
+                        <li> &lt;date&gt; : date d'export (format AAAA-MM-JJ)</li>
+                    </ol>
+                </ul>
+            </p>
+        </section>
+        <section name="Parametrage GUI">
+            <p>
+                <b>Paramétrage pour l'assistant</b>
+                <br/>
+                Dans le menu:
+            </p>
+            <source>
+                <![CDATA[<menu plugin="net.codjo.broadcast.gui.plugin.BroadcastGuiPlugin" actionId="BroadcastWizard"/>]]>
+            </source>
+            <p>
+                <b>Paramétrage pour les IHM de paramétrage</b>
+                <br/>
+                Si besoin de spécifique, il est possible de surcharger le comportement en specifiant
+                dans le fichier preference.xml:
+            </p>
+            <source><![CDATA[
+              <preference id="BroadcastSectionsWindow"
+                  detailWindowClassName="net.codjo.broadcast.gui.BroadcastSectionsDetailWindow">
+                  <selectByPk>selectBroadcastSectionsById</selectByPk>
+                  <selectAll>selectAllBroadcastSections</selectAll>
+                  <insert>newBroadcastSections</insert>
+                  <update>updateBroadcastSections</update>
+                  <delete>deleteBroadcastSections</delete>
+                  <column fieldName="sectionId" label="N°" minSize="50" maxSize="50"/>
+                  <column fieldName="sectionName" label="Libellé" minSize="200"/>
+                  <column fieldName="family" label="Famille" minSize="100" maxSize="200"/>
+              </preference>
+
+              <preference id="BroadcastColumnsWindow"
+                  detailWindowClassName="net.codjo.broadcast.gui.BroadcastColumnsDetailWindow">
+                  <selectByPk>selectBroadcastColumnsById</selectByPk>
+                  <selectAll>selectAllBroadcastColumns</selectAll>
+                  <insert>newBroadcastColumns</insert>
+                  <update>updateBroadcastColumns</update>
+                  <delete>deleteBroadcastColumns</delete>
+                  <column fieldName="columnNumber" label="N°" minSize="50" maxSize="50"/>
+                  <column fieldName="dbTableName" label="Table" minSize="100" maxSize="200"/>
+                  <column fieldName="dbFieldName" label="Champ" minSize="100" maxSize="200"/>
+                  <column fieldName="columnName" label="Libellé" minSize="200"/>
+              </preference>
+
+              <preference id="BroadcastFilesWindow"
+                  detailWindowClassName="net.codjo.broadcast.gui.BroadcastFilesDetailWindow">
+                  <selectByPk>selectBroadcastFilesById</selectByPk>
+                  <selectAll>selectAllBroadcastFiles</selectAll>
+                  <insert>newBroadcastFiles</insert>
+                  <update>updateBroadcastFiles</update>
+                  <delete>deleteBroadcastFiles</delete>
+                  <column fieldName="fileId" label="N°" minSize="50" maxSize="50"/>
+                  <column fieldName="fileName" label="Libellé" minSize="200"/>
+                  <column fieldName="destinationSystem" label="Système destination" minSize="100" maxSize="200"/>
+              </preference>
+
+              <preference id="BroadcastFileContentsWindow"
+                  detailWindowClassName="net.codjo.broadcast.gui.BroadcastFileContentsDetailWindow">
+                  <selectByPk>selectBroadcastFileContentsById</selectByPk>
+                  <selectAll>selectAllBroadcastFileContents</selectAll>
+                  <insert>newBroadcastFileContents</insert>
+                  <update>updateBroadcastFileContents</update>
+                  <delete>deleteBroadcastFileContents</delete>
+                  <column fieldName="sectionPosition" label="Position" minSize="20"/>
+                  <column fieldName="fileName" label="Fichier" minSize="50"/>
+                  <column fieldName="sectionName" label="Section" minSize="50"/>
+              </preference>]]>
+            </source>
+            <p>
+                <b>Paramétrage pour les IHM de paramétrage</b>
+                <br/>
+                Dans le menu:
+            </p>
+            <source>
+                <![CDATA[<menu>
+                  <name>Export</name>
+                  <menu action="net.codjo.broadcast.gui.BroadcastFilesAction"/>
+                  <menu action="net.codjo.broadcast.gui.BroadcastSectionsAction"/>
+              </menu>]]>
+            </source>
+        </section>
+    </body>
+</document>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<preferenceList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="http://preference.xsd">
+    <preference id="BroadcastSectionsWindow"
+                detailWindowClassName="net.codjo.broadcast.gui.BroadcastSectionsDetailWindow">
+        <selectByPk>selectBroadcastSectionsById</selectByPk>
+        <selectAll>selectAllBroadcastSections</selectAll>
+        <insert>newBroadcastSections</insert>
+        <update>updateBroadcastSections</update>
+        <delete>deleteBroadcastSections</delete>
+        <column fieldName="sectionId" label="N°" preferredSize="50" sorter="Numeric"/>
+        <column fieldName="sectionName" label="Libellé" preferredSize="300"/>
+        <column fieldName="family" label="Famille" preferredSize="300"/>
+    </preference>
+
+    <preference id="BroadcastColumnsWindow"
+                detailWindowClassName="net.codjo.broadcast.gui.BroadcastColumnsDetailWindow">
+        <selectByPk>selectBroadcastColumnsById</selectByPk>
+        <selectAll>selectBroadcastColumnsBySectionId</selectAll>
+        <insert>newBroadcastColumns</insert>
+        <update>updateBroadcastColumns</update>
+        <delete>deleteBroadcastColumns</delete>
+        <column fieldName="columnNumber" label="N°" preferredSize="50" sorter="Numeric"/>
+        <column fieldName="dbTableName" label="Table" preferredSize="100"/>
+        <column fieldName="dbFieldName" label="Champ" preferredSize="100"/>
+        <column fieldName="columnName" label="Libellé" preferredSize="200"/>
+        <column fieldName="columnNumberFormat" label="Format" preferredSize="50"/>
+        <column fieldName="expression" label="Expression" preferredSize="400"/>
+    </preference>
+
+    <preference id="BroadcastFilesWindow"
+                detailWindowClassName="net.codjo.broadcast.gui.BroadcastFilesDetailWindow">
+        <selectByPk>selectBroadcastFilesById</selectByPk>
+        <selectAll>selectAllBroadcastFiles</selectAll>
+        <insert>newBroadcastFiles</insert>
+        <update>updateBroadcastFiles</update>
+        <delete>deleteBroadcastFiles</delete>
+        <column fieldName="fileId" label="N°" preferredSize="50" sorter="Numeric"/>
+        <column fieldName="fileName" label="Libellé" preferredSize="200"/>
+        <column fieldName="destinationSystem" label="Système destination" preferredSize="200"/>
+    </preference>
+
+    <preference id="BroadcastFileContentsWindow"
+                detailWindowClassName="net.codjo.broadcast.gui.BroadcastFileContentsDetailWindow">
+        <selectByPk>selectBroadcastFileContentsById</selectByPk>
+        <selectAll>selectNamesBroadcastFileContentsByFileId</selectAll>
+        <insert>newBroadcastFileContents</insert>
+        <update>updateBroadcastFileContents</update>
+        <delete>deleteBroadcastFileContents</delete>
+        <column fieldName="sectionPosition" label="Position" preferredSize="50" sorter="Numeric"/>
+        <column fieldName="fileName" label="Fichier" preferredSize="200"/>
+        <column fieldName="sectionName" label="Section" preferredSize="200"/>
+    </preference>
+</preferenceList>

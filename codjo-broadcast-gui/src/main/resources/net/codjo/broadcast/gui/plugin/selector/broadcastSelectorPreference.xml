@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<preferenceList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="http://preference.xsd">
+    <preference id="BroadcastSelectorsWindow"
+                detailWindowClassName="net.codjo.broadcast.gui.selector.BroadcastSelectorLogic">
+        <selectByPk>selectBroadcastSelectorById</selectByPk>
+        <selectAll>selectAllBroadcastSelector</selectAll>
+        <insert>newBroadcastSelector</insert>
+        <update>updateBroadcastSelector</update>
+        <delete>deleteBroadcastSelector</delete>
+        <column fieldName="selectorName" label="Libellé" preferredSize="100"/>
+        <column fieldName="selectorFamily" label="Famille" preferredSize="100"/>
+    </preference>
+</preferenceList>

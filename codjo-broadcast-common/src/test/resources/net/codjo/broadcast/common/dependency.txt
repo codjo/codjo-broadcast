@@ -1,0 +1,14 @@
+net.codjo.broadcast.common
+	-> net.codjo.broadcast.common.columns
+	-> net.codjo.broadcast.common.computed
+	-> net.codjo.broadcast.common.diffuser
+	-> net.codjo.sql.builder
+	-> net.codjo.variable
+net.codjo.broadcast.common.columns
+	-> net.codjo.expression
+	-> net.codjo.sql.builder
+net.codjo.broadcast.common.computed
+net.codjo.broadcast.common.diffuser
+	-> net.codjo.util.system
+net.codjo.broadcast.common.message
+	-> net.codjo.workflow.common.message

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+
+    <properties>
+        <title>agf-broadcast</title>
+    </properties>
+
+    <body>
+
+        <section name="Ajout d'un broadcast dans un projet">
+            <p> Pour ajouter un Broadcast dans un projet example PIMS : </p>
+            <p>
+                <b>Coté client : </b>
+            </p>
+            <ol>
+                <li>Ajoutez le package xxx dans
+                    <code>gui/brodcast</code>
+                </li>
+                <li>Créez dans ce package
+                    <code>GuiPreference</code> et son Test
+                </li>
+                <li>Ajouter la table d'export dans
+                    <code>GuiPrefTestStructure.xml</code>
+                </li>
+                <li>Ajoutez la balise
+                    <code>doc-structure</code> dans les futures du datagen de la table exporté.
+                </li>
+                <li>Dans
+                    <code>PimsWindow.initBroadcastPreferences()</code> ajoutez la classe GuiPreference.
+                </li>
+            </ol>
+            <p>
+                <b>Coté Serveur : </b>
+            </p>
+            <ol>
+                <li>Ajoutez le package xxx dans
+                    <code>module/common/brodcast</code>
+                </li>
+                <li>Créez dans ce package
+                    <code>XxxPreferences</code> et
+                    <code>XxxSelector</code> et les Test
+                </li>
+                <li>Dans
+                    <code>PimsPreferenceManager</code> : ajoutez le
+                    <code>XxxPreferences</code>
+                </li>
+                <li>S'assurer que
+                    <code>BroadcastFunctionalTest</code> marche
+                </li>
+            </ol>
+        </section>
+
+    </body>
+</document>

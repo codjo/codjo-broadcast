@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+    <properties>
+        <title>Changes</title>
+    </properties>
+    <body>
+        <release version="5.08" date="2007-04-17" description="Evolution">
+            <action dev="galaber" type="add">
+               [GUI] Ajout d'un tri des préférences IHM.
+            </action>
+            <action dev="boissie,villard" type="add">
+               [COMMON] Ajout d'un constructeur par défaut PreferencesManager.
+            </action>
+        </release>
+        <release version="5.07" date="2007-03-19" description="Correction">
+            <action dev="galaber,cassagc" type="fix">
+                [COMMON] Correction du bug lors de l'insertion d'une entête nulle d'un fichier.
+            </action>
+            <action dev="boissie,gaudefr" type="fix">
+                [COMMON] Gestion du type SQL Float dans FileColumnFactory.
+            </action>
+        </release>
+        <release version="5.06" date="2006-07-06" description="Evolution">
+            <action dev="poucher" type="add">
+               [GUI] Ajout des IHMs pour le client serveur.
+            </action>
+        </release>
+        <release version="5.05" date="2006-05-19" description="Evolution">
+            <action dev="torrent" type="add">
+               [COMMON] Ajout d'une balise root 'entities' dans les fichiers datagen pour la gestion des xsd. Incompatible avec les versions de datagen inférieures à 1.20.
+            </action>
+        </release>
+        <release version="5.04" date="2005-10-10" description="Ajout">
+            <action dev="guillie" type="add">
+               [GUI] Modification du wizard d'export (ouverture des steps).
+            </action>
+        </release>
+        <release version="5.03" date="2005-06-03" description="Correction">
+            <action dev="gonnot" type="fix">
+               [COMMON] Les noms de fichiers peuvent contenir des variables.
+            </action>
+        </release>
+        <release version="5.02" date="2005-03-04" description="Evolution">
+            <action dev="couvreu" type="fix">
+               [COMMON] Migration vers Windows XP (pour les répertoires temporaires).
+            </action>
+        </release>
+        <release version="5.01" date="2004-11-30" description="Correction">
+            <action dev="nadaud" type="fix">
+               [AJB] BroadcastSessionEJB passé en CMT avec type transactionnel Mandatory pour
+               que la transaction J2EE ouverte par BroadcastTriggerEJB soit bien propagée.
+            </action>
+            <action dev="lajmi" type="fix">
+               [COMMON] Modification des contraintes.
+            </action>
+            <action dev="gonnot" type="fix">
+                [COMMON] Suppression du pb de découplage : l'objet 'JoinKeyExpression' de agf-sql-builder faisait partie
+                de l'API publique.
+            </action>
+            <action dev="rivierv" type="fix">
+               [GUI] Correction sur l'IHM des exports qui ne s'ouvrait plus.
+            </action>
+        </release>
+        <release version="5.00" date="2004-07-23" description="Refactoring">
+            <action dev="rivierv" type="update">
+				Passage à agf-mad version 2.00
+            </action>
+            <action dev="palmont" type="update">
+				Modification du fichier agf-broadcast-common-def.xml pour rester compatible avec agf-datagen 1.09.				
+            </action>
+            <action dev="galaber" type="fix">
+               [COMMON] Modification de la gestion des expressions.
+            </action>
+            <action dev="gonnot" type="fix">
+               [COMMON] Extraction de la fonction 'construction de requête' dans une librairie séparée.
+            </action>
+            <action dev="gonnot" type="update">
+               [ALL] Utilisation de la version 1.02-SNAPSHOT de agf-expression.
+            </action>
+        </release>
+        <release version="4.03" date="2004-04-01" description="Evolution">
+            <action dev="lajmi" type="fix">
+               [COMMON] Ajout d'une classe pour la gestion des champs calculés dont l'expression est une requete SQL.
+            </action>
+        </release>
+        <release version="4.02" date="2003-12-16" description="Correction">
+            <action dev="gonnot" type="fix">
+               [LIB/EJB] Amélioration de la gestion des connexions JDBC.
+            </action>
+            <action dev="gonnot" type="fix">
+               [ALL] Passage aux normes agf 1.02.
+            </action>
+        </release>
+        <release version="4.01" date="2003-11-03" description="Correction mineur">
+            <action dev="gonnot" type="fix">
+               Corrections mineures suite aux changements de version de maven.
+            </action>
+            <action dev="gonnot" type="fix">
+               Passage a agf-trigger version 1.05.
+            </action>
+        </release>
+        <release version="4.00" date="2003-09-05" description="Stabilisation">
+            <action dev="gonnot" type="fix">
+               Stabilisation des SNAPSHOT.
+            </action>
+        </release>
+    </body>
+</document>

@@ -1,0 +1,76 @@
+net.codjo.broadcast.common.message
+net.codjo.broadcast.gui
+	-> net.codjo.i18n.common
+	-> net.codjo.i18n.gui
+	-> net.codjo.mad.gui.i18n
+	-> net.codjo.gui.toolkit.number
+	-> net.codjo.gui.toolkit.swing
+	-> net.codjo.gui.toolkit.text
+	-> net.codjo.gui.toolkit.util
+	-> net.codjo.mad.client.request
+	-> net.codjo.mad.common.structure
+	-> net.codjo.mad.gui.framework
+	-> net.codjo.mad.gui.request
+	-> net.codjo.mad.gui.request.event
+	-> net.codjo.mad.gui.request.util
+	-> net.codjo.sql.builder
+net.codjo.broadcast.gui.plugin
+	-> net.codjo.i18n.common
+	-> net.codjo.mad.gui.i18n
+	-> net.codjo.broadcast.gui
+	-> net.codjo.broadcast.gui.selector
+	-> net.codjo.broadcast.gui.wizard
+	-> net.codjo.gui.toolkit.wizard
+	-> net.codjo.mad.client.plugin
+	-> net.codjo.mad.common.structure
+	-> net.codjo.mad.gui.base
+	-> net.codjo.mad.gui.framework
+	-> net.codjo.mad.gui.plugin
+	-> net.codjo.mad.gui.request
+	-> net.codjo.plugin.gui
+	-> net.codjo.workflow.gui.plugin
+	-> net.codjo.workflow.gui.wizard
+	-> org.xml.sax
+net.codjo.broadcast.gui.selector
+	-> net.codjo.broadcast.gui
+	-> net.codjo.mad.client.request
+	-> net.codjo.mad.common.structure
+	-> net.codjo.mad.gui.framework
+	-> net.codjo.mad.gui.request
+	-> net.codjo.mad.gui.request.action
+	-> net.codjo.mad.gui.request.factory
+	-> net.codjo.mad.gui.request.util
+net.codjo.broadcast.gui.wizard
+	-> net.codjo.i18n.gui
+	-> net.codjo.mad.gui.i18n
+	-> net.codjo.mad.gui.framework
+	-> net.codjo.broadcast.common.message
+	-> net.codjo.gui.toolkit.date
+	-> net.codjo.gui.toolkit.util
+	-> net.codjo.gui.toolkit.wizard
+	-> net.codjo.mad.client.plugin
+	-> net.codjo.mad.client.request
+	-> net.codjo.mad.gui.request
+	-> net.codjo.workflow.common.message
+	-> net.codjo.workflow.gui.wizard
+net.codjo.gui.toolkit.date
+net.codjo.gui.toolkit.number
+net.codjo.gui.toolkit.swing
+net.codjo.gui.toolkit.text
+net.codjo.gui.toolkit.util
+net.codjo.gui.toolkit.wizard
+net.codjo.mad.client.plugin
+net.codjo.mad.client.request
+net.codjo.mad.common.structure
+net.codjo.mad.gui.base
+net.codjo.mad.gui.framework
+net.codjo.mad.gui.plugin
+net.codjo.mad.gui.request
+net.codjo.mad.gui.request.action
+net.codjo.mad.gui.request.event
+net.codjo.mad.gui.request.factory
+net.codjo.mad.gui.request.util
+net.codjo.sql.builder
+net.codjo.workflow.common.message
+net.codjo.workflow.gui.wizard
+org.xml.sax

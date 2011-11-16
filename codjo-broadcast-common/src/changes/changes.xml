@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+    <properties>
+        <title>Changes</title>
+    </properties>
+    <body>
+        <release version="5.08" date="2007-04-17" description="Evolution">
+            <action dev="boissie,villard" type="add">
+                Ajout d'un constructeur par défaut PreferencesManager.
+            </action>
+        </release>
+        <release version="5.07" date="2007-03-19" description="Correction">
+            <action dev="galaber,cassagc" type="fix">
+                Correction du bug lors de l'insertion d'une entête nulle d'un fichier.
+            </action>
+            <action dev="boissie,gaudefr" type="fix">
+                Gestion du type SQL Float dans FileColumnFactory.
+            </action>
+        </release>
+        <release version="5.05" date="2006-05-19" description="Evolution">
+            <action dev="torrent" type="add">
+                Ajout d'une balise root 'entities' dans les fichiers datagen pour la gestion des xsd.
+                Incompatible avec les versions de datagen inférieures à 1.20.
+            </action>
+        </release>
+        <release version="5.03" date="2005-05-24" description="Correction">
+            <action dev="gonnot" type="fix">
+                Les noms de fichiers peuvent contenir des variables.
+            </action>
+        </release>
+        <release version="5.02" date="2005-04-03" description="Evolution">
+            <action dev="couvreu" type="fix">
+                Migration vers Windows XP (pour les répertoires temporaires).
+            </action>
+        </release>
+        <release version="5.01" date="CVS" description="contraintes">
+            <action dev="lajmi" type="fix">
+                On ne génère plus les contraintes entre les tables, et regénère les Triggers Delete et UI.
+            </action>
+            <action dev="gonnot" type="fix">
+                Suppression du pb de découplage : l'objet 'JoinKeyExpression' de agf-sql-builder faisait
+                partie
+                de l'API publique. Une nouvelle classe a été introduite.
+            </action>
+            <action dev="gonnot" type="fix">
+                Extraction de la fonction 'construction de requête' dans une librairie séparée.
+            </action>
+            <action dev="gonnot" type="fix">
+                Correction du bug sur joinToBroadcastTable dans ComputedContextAdapter.
+            </action>
+        </release>
+        <release version="5.00" date="2004-04-28" description="Refactoring">
+            <action dev="galaber" type="update">
+                Prie en compte des évolutions de la lib Expression.
+            </action>
+            <action dev="galaber" type="fix">
+                Extraction d'une classe Expression generique vers la librairie Expression (creation de la
+                classe GeneratorExpression qui en hérite).
+            </action>
+            <action dev="gonnot" type="fix">
+                Extraction de la fonction 'construction de requête' dans une librairie séparée.
+            </action>
+        </release>
+        <release version="4.03" date="2004-03-15" description="Evolution">
+            <action dev="lajmi" type="fix">
+                Ajout d'une classe pour la gestion des champs calcul‚s dont l'expression est une requete SQL.
+                la requete SQL va contenir $COMPUTED_TAB$, $TEMP_TAB et $COMPUTED_COL$ qui vont etre remplacé
+                automatiquement.
+            </action>
+        </release>
+        <release version="4.02" date="2003-11-25" description="Correction">
+            <action dev="gonnot" type="fix">
+                Modification des Homes (FileColumnHome et BroadcasterHome) pour
+                n'utiliser des connexions qu'a la demande.
+            </action>
+        </release>
+        <release version="4.01" date="2003-11-03" description="Correction">
+            <action dev="gonnot" type="fix">
+                Corrections mineures.
+            </action>
+        </release>
+        <release version="4.00" date="2003-06-18" description="Stabilisation">
+            <action dev="gonnot" type="fix">
+                Stabilisation des SNAPSHOT.
+            </action>
+            <action dev="gonnot" type="fix">
+                Mavenisation de la librairie avec changement de nom.
+            </action>
+            <action dev="gonnot" type="fix">
+                Changement de signature pour la construction d'un Selector (Ajout du SELECTION_ID).
+            </action>
+        </release>
+    </body>
+</document>

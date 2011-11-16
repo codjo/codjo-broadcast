@@ -1,0 +1,14 @@
+net.codjo.broadcast.common
+net.codjo.broadcast.common.computed
+net.codjo.broadcast.gui
+net.codjo.broadcast.gui.plugin
+net.codjo.broadcast.releasetest
+	-> net.codjo.broadcast.common
+	-> net.codjo.broadcast.common.computed
+	-> net.codjo.broadcast.gui
+	-> net.codjo.broadcast.gui.plugin
+	-> net.codjo.broadcast.server.plugin
+	-> net.codjo.expression.help
+	-> net.codjo.mad.common.structure
+	-> net.codjo.mad.gui.base
+	-> net.codjo.mad.gui.framework

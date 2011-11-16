@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<entities>
+    <entity name="net.codjo.broadcast.common.data.BroadcastFiles"
+            table="PM_BROADCAST_FILES">
+        <description>Fichier export</description>
+        <feature>
+            <generate-all/>
+            <trigger-delete>
+                <cascade entity="net.codjo.broadcast.common.data.BroadcastFileContents">
+                    <key from="fileId" to="fileId"/>
+                </cascade>
+            </trigger-delete>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="false"/>
+            </sql-index>
+        </feature>
+        <primary-key key-generator="MAX">
+            <field name="fileId"/>
+        </primary-key>
+        <properties>
+            <field name="fileId" type="java.lang.Integer">
+                <description>Num&#233;ro de fichier</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="fileName" type="string">
+                <description>Nom du fichier</description>
+                <sql precision="30" type="varchar"/>
+            </field>
+            <field name="destinationSystem" type="string">
+                <description>Syst&#233;me de destination</description>
+                <sql precision="6" type="varchar"/>
+            </field>
+            <field name="fileDestinationLocation" type="string">
+                <description>Emplacement de la destination</description>
+                <sql precision="80" type="varchar"/>
+            </field>
+            <field name="fileHeader" type="boolean">
+                <description>Ent&#234;te de fichier</description>
+                <sql required="true" type="bit"/>
+            </field>
+            <field name="fileHeaderText" type="string">
+                <description>Texte d&apos;ent&#234;te</description>
+                <sql type="longvarchar"/>
+            </field>
+            <field name="autoDistribution" type="boolean">
+                <description>Export automatique</description>
+                <sql required="true" type="bit"/>
+            </field>
+            <field name="distributionMethod" type="string">
+                <description>M&#233;thode de distribution</description>
+                <sql precision="6" type="varchar"/>
+            </field>
+            <field name="historiseFile" type="boolean">
+                <description>Fichier &#224; historiser</description>
+                <sql required="true" type="bit"/>
+            </field>
+            <field name="cftBatchFile" type="string">
+                <description>Fichier batch pour CFT</description>
+                <sql precision="80" type="varchar"/>
+            </field>
+            <field name="sectionSeparator" type="boolean">
+                <description>S&#233;parateur de section</description>
+                <sql required="true" type="bit"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="net.codjo.broadcast.common.data.BroadcastFileContents"
+            table="PM_BROADCAST_FILE_CONTENTS">
+        <description>Contenu des fichiers exports</description>
+        <feature>
+            <generate-all/>
+            <handler-select id="selectBroadcastFileContentsByFileId">
+                <query type="OQL">SELECT p FROM net.codjo.broadcast.common.data.BroadcastFileContents p
+                    WHERE fileId = $1</query>
+                <arg>fileId</arg>
+            </handler-select>
+            <handler-sql id="selectNamesBroadcastFileContentsByFileId">
+                <attributes>
+                    <name>contentId</name>
+                    <name>fileId</name>
+                    <name>fileName</name>
+                    <name>sectionPosition</name>
+                    <name>sectionName</name>
+                </attributes>
+                <query>
+                    <![CDATA[
+              select  bfc.CONTENT_ID
+                  , bfc.FILE_ID
+                  , bf.FILE_NAME
+                  , bfc.SECTION_POSITION
+                  , bs.SECTION_NAME
+              from PM_BROADCAST_FILE_CONTENTS bfc
+              inner join PM_BROADCAST_FILES bf   on   bfc.FILE_ID = bf.FILE_ID
+              inner join PM_BROADCAST_SECTION bs on   bfc.SECTION_ID = bs.SECTION_ID
+              where bfc.FILE_ID = (?)
+                    ]]>
+                </query>
+                <arg>fileId</arg>
+            </handler-sql>
+            <trigger-iu>
+                <check-record-exist entity="net.codjo.broadcast.common.data.BroadcastFiles">
+                    <key from="fileId" to="fileId"/>
+                </check-record-exist>
+                <check-record-exist
+                      entity="net.codjo.broadcast.common.data.BroadcastSections">
+                    <key from="sectionId" to="sectionId"/>
+                </check-record-exist>
+            </trigger-iu>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="false"/>
+            </sql-index>
+        </feature>
+        <primary-key key-generator="MAX">
+            <field name="contentId"/>
+        </primary-key>
+        <!-- a titre informatif les FK ne sont pas genere. Ici c'est les triggers D et UI qui sont utilise -->
+        <foreign-keys>
+            <link id="FK_FILE_FILE_CONTENT"
+                  table="net.codjo.broadcast.common.data.BroadcastFiles">
+                <field from="fileId" to="fileId"/>
+            </link>
+            <link id="FK_SECTION_FILE_CONTENT"
+                  table="net.codjo.broadcast.common.data.BroadcastSections">
+                <field from="sectionId" to="sectionId"/>
+            </link>
+        </foreign-keys>
+        <properties>
+            <field name="contentId" type="java.lang.Integer">
+                <description>Num&#233;ro du contenu</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="fileId" type="java.lang.Integer">
+                <description>Num&#233;ro du fichier</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="sectionId" type="java.lang.Integer">
+                <description>Num&#233;ro de section</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="sectionPosition" type="java.lang.Integer">
+                <description>Position de la section</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="sectionHeader" type="boolean">
+                <description>Ent&#234;te de section</description>
+                <sql required="true" type="bit"/>
+            </field>
+            <field name="sectionHeaderText" type="string">
+                <description>Texte d&apos;ent&#234;te de section</description>
+                <sql type="longvarchar"/>
+            </field>
+            <field name="columnSeparator" type="string">
+                <description>S&#233;parateur de colonnes</description>
+                <sql precision="2" type="varchar"/>
+            </field>
+            <field name="columnHeader" type="boolean">
+                <description>Ent&#234;te de colonne</description>
+                <sql required="true" type="bit"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="net.codjo.broadcast.common.data.BroadcastColumns"
+            table="PM_BROADCAST_COLUMNS">
+        <description>Colonnes des exports</description>
+        <feature>
+            <generate-all/>
+            <handler-select id="selectBroadcastColumnsBySectionId">
+                <query type="OQL">SELECT p FROM net.codjo.broadcast.common.data.BroadcastColumns p
+                    WHERE sectionId = $1 ORDER BY columnNumber</query>
+                <arg>sectionId</arg>
+            </handler-select>
+            <trigger-iu>
+                <check-record-exist
+                      entity="net.codjo.broadcast.common.data.BroadcastSections">
+                    <key from="sectionId" to="sectionId"/>
+                </check-record-exist>
+            </trigger-iu>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="false"/>
+            </sql-index>
+        </feature>
+        <!-- a titre informatif les FK ne sont pas genere. Ici c'est les triggers D et UI qui sont utilise -->
+        <primary-key key-generator="MAX">
+            <field name="columnsId"/>
+        </primary-key>
+        <foreign-keys>
+            <link id="FK_BCST_SECTION_BCST_COLUMNS"
+                  table="net.codjo.broadcast.common.data.BroadcastSections">
+                <field from="sectionId" to="sectionId"/>
+            </link>
+        </foreign-keys>
+        <properties>
+            <field name="columnsId" type="java.lang.Integer">
+                <description>Num&#233;ro de colonne</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="sectionId" type="java.lang.Integer">
+                <description>Num&#233;ro de section</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="dbTableName" type="string">
+                <description>Nom de la jointure destination</description>
+                <sql precision="64" type="varchar"/>
+            </field>
+            <field name="dbFieldName" type="string">
+                <description>Nom physique du champ destination</description>
+                <sql precision="30" type="varchar"/>
+            </field>
+            <field name="columnName" type="string">
+                <description>Nom de la colonne</description>
+                <sql precision="30" type="varchar"/>
+            </field>
+            <field name="columnNumber" type="java.lang.Integer">
+                <description>Num&#233;ro de la colonne</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="columnLength" type="java.lang.Integer">
+                <description>Longueur de la colonne</description>
+                <sql type="integer"/>
+            </field>
+            <field name="rightColumnPadding" type="boolean">
+                <description>Padding &#224; droite</description>
+                <sql required="true" type="bit"/>
+            </field>
+            <field name="paddingCaracter" type="string">
+                <description>Caract&#233;re de padding</description>
+                <sql precision="1" type="varchar"/>
+            </field>
+            <field name="columnDateFormat" type="string">
+                <description>Format de colonne date</description>
+                <sql precision="18" type="varchar"/>
+            </field>
+            <field name="columnNumberFormat" type="string">
+                <description>Format num&#233;rique de la colonne</description>
+                <sql precision="30" type="varchar"/>
+            </field>
+            <field name="expression" type="string">
+                <description>Expression de la colonne</description>
+                <sql type="text"/>
+            </field>
+            <field name="breakField" type="boolean">
+                <description>Champ definit comme champ de rupture</description>
+                <sql required="true" type="bit"/>
+            </field>
+        </properties>
+    </entity>
+    <entity name="net.codjo.broadcast.common.data.BroadcastSections"
+            table="PM_BROADCAST_SECTION">
+        <description>Sections d&apos;export</description>
+        <feature>
+            <generate-all/>
+            <trigger-delete>
+                <cascade entity="net.codjo.broadcast.common.data.BroadcastColumns">
+                    <key from="sectionId" to="sectionId"/>
+                </cascade>
+                <cascade entity="net.codjo.broadcast.common.data.BroadcastFileContents">
+                    <key from="sectionId" to="sectionId"/>
+                </cascade>
+            </trigger-delete>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="false"/>
+            </sql-index>
+        </feature>
+        <primary-key key-generator="MAX">
+            <field name="sectionId"/>
+        </primary-key>
+        <properties>
+            <field name="sectionId" type="java.lang.Integer">
+                <description>Num&#233;ro de section</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="sectionName" type="string">
+                <description>Nom de la section</description>
+                <sql precision="30" type="varchar"/>
+            </field>
+            <field name="selectionId" type="java.lang.Integer">
+                <description>Num&#233;ro de selection</description>
+                <sql required="true" type="integer"/>
+            </field>
+            <field name="family" type="string">
+                <description>Famille</description>
+                <sql precision="30" required="true" type="varchar"/>
+            </field>
+            <field name="fixedLength" type="boolean">
+                <description>Longueur fixe</description>
+                <sql required="true" type="bit"/>
+            </field>
+            <field name="recordLength" type="java.lang.Integer">
+                <description>Longueur de l&apos;enregistrement</description>
+                <sql type="integer"/>
+            </field>
+            <field name="decimalSeparator" type="string">
+                <description>S&#233;parateur d&#233;cimal</description>
+                <sql precision="1" type="varchar"/>
+            </field>
+        </properties>
+    </entity>
+</entities>

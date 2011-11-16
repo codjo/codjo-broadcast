@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+     | POM Relationships
+     -->
+
+    <artifactId>codjo-broadcast-server</artifactId>
+    <parent>
+        <groupId>net.codjo.broadcast</groupId>
+        <artifactId>codjo-broadcast</artifactId>
+        <version>6.50-SNAPSHOT</version>
+    </parent>
+    <dependencies>
+        <dependency>
+            <groupId>net.codjo.broadcast</groupId>
+            <artifactId>codjo-broadcast-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.workflow</groupId>
+            <artifactId>codjo-workflow-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.sql</groupId>
+            <artifactId>codjo-sql-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.sql</groupId>
+            <artifactId>codjo-sql-server</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.agent</groupId>
+            <artifactId>codjo-agent</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.util</groupId>
+            <artifactId>codjo-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.test</groupId>
+            <artifactId>codjo-test-common</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.database</groupId>
+            <artifactId>codjo-database-main</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.datagen</groupId>
+            <artifactId>codjo-datagen</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.datagen</groupId>
+            <artifactId>codjo-datagen</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.broadcast</groupId>
+            <artifactId>codjo-broadcast-common</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.fake-db</groupId>
+            <artifactId>codjo-fake-db</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+    <!--
+    | Project Information
+    -->
+
+    <name>Lib &gt; Broadcast &gt; Server</name>
+    <description>Module serveur d'export</description>
+    <inceptionYear>2007</inceptionYear>
+    <!--
+    | Build Settings
+    -->
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>src/datagen/datagen.xml</file>
+                                    <type>xml</type>
+                                    <classifier>datagen</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>src/datagen/datagen-selector.xml</file>
+                                    <type>xml</type>
+                                    <classifier>datagen-selector</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

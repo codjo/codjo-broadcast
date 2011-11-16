@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="$pom.name">
+
+    <title>$pom.name</title>
+
+    <body>
+        <links>
+            <item name="Bug" href="http://4ddev02:8080/mantis"/>
+            <item name="Wiki" href="http://4ddev02/vqwiki/jsp/Wiki?$pom.groupId"/>
+        </links>
+        <menu name="Composant">
+            <item name="Introduction" href="/index.html"/>
+            <item name="Dépendances" href="/dependency_ALL.png"/>
+            <item name="Historique" href="/changes-report.html"/>
+        </menu>
+        <menu name="Modules">
+        #if ($overviewPageCreate == "true" )
+            <item name="${overviewPageLinkTitle}" href="${overviewPageLink}.html"/>
+        #end
+            <item name="Dépendances" href="/dependency.png"/>
+        #foreach ($reactorProject in $multiprojects)
+            <item name="$reactorProject.name" href="/${aggregateDir}${reactorProject.artifactId}/index.html"/>
+        #end
+        </menu>
+    </body>
+</project>
+

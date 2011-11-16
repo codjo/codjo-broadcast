@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<document>
+
+    <properties>
+        <title>agf-broadcast-common</title>
+    </properties>
+
+    <body>
+        <section name="Export">
+            <p>
+                Librairie responsable des exports
+            </p>
+            <subsection name="Packages">
+                <p>
+                    Description rapide des packages de cette librairie.
+                </p>
+                <table>
+                    <tr>
+                        <th>Package</th>
+                        <th>Commentaire</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="./apidocs/net/codjo/broadcast/common/package-summary.html">
+                                common</a>
+                        </td>
+                        <td>
+                            Noyau de l'export.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="./apidocs/net/codjo/broadcast/common/columns/package-summary.html">
+                                columns</a>
+                        </td>
+                        <td>
+                            Definition des objets responsable du formatage d'une colonne.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="./apidocs/net/codjo/broadcast/common/computed/package-summary.html">
+                                computed</a>
+                        </td>
+                        <td>
+                            Definition des classes permettant de faire des colonnes calculés.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="./apidocs/net/codjo/broadcast/common/diffuser/package-summary.html">
+                                diffuser</a>
+                        </td>
+                        <td>
+                            Definition des classes s'occupant de la diffusion du fichier exporté.
+                        </td>
+                    </tr>
+                </table>
+            </subsection>
+        </section>
+    </body>
+</document>

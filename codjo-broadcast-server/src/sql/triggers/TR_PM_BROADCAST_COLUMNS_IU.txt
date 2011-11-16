@@ -1,0 +1,55 @@
+if exists (select 1
+            from  sysobjects
+            where id = object_id('TR_PM_BROADCAST_COLUMNS_IU')
+            and   type = 'TR')
+begin
+   drop trigger TR_PM_BROADCAST_COLUMNS_IU
+   print 'Trigger TR_PM_BROADCAST_COLUMNS_IU supprime'
+end
+go
+
+/*  Insert, Update trigger "TR_PM_BROADCAST_COLUMNS_IU" for table "PM_BROADCAST_COLUMNS"  */
+create trigger TR_PM_BROADCAST_COLUMNS_IU on PM_BROADCAST_COLUMNS for insert, update as
+begin
+    declare
+       @maxcard  int,
+       @numrows  int,
+       @numrowscours int,
+       @numrowsordres int,
+       @numnull  int,
+       @errno    int,
+       @errmsg   varchar(255)
+
+    select  @numrows = @@rowcount
+    if @numrows = 0
+       return
+
+    
+    /*  Parent "PM_BROADCAST_SECTION" must exist when inserting a child in "PM_BROADCAST_COLUMNS"  */
+    if update(SECTION_ID)
+    begin
+       if (select count(*)
+           from   PM_BROADCAST_SECTION t1, inserted t2
+           where  t1.SECTION_ID = t2.SECTION_ID) != @numrows
+          begin
+             select @errno  = 30002,
+                    @errmsg = 'Parent does not exist in "PM_BROADCAST_SECTION". Cannot create child in "PM_BROADCAST_COLUMNS".'
+             goto error
+          end
+    end
+    
+    return
+
+/*  Errors handling  */
+error:
+    raiserror @errno @errmsg
+    rollback  transaction
+end
+go
+
+if exists (select 1
+            from  sysobjects
+            where id = object_id('TR_PM_BROADCAST_COLUMNS_IU')
+            and   type = 'TR')
+   print 'Trigger TR_PM_BROADCAST_COLUMNS_IU cree'
+go

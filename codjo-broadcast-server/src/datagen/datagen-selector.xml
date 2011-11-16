@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://datagen.xsd">
+    <entity name="net.codjo.red.data.param.BroadcastSelector" table="PM_BROADCAST_SELECTOR">
+        <description>Table de requêtes de selections génériques pour les familles d'exports</description>
+
+        <feature>
+            <sql gap="1000000"/>
+            <sql/>
+            <bean/>
+            <castor/>
+            <handler-update id="update${className}"/>
+            <handler-delete id="delete${className}"/>
+            <handler-new id="new${className}"/>
+            <handler-select id="selectAll${className}" type="All"/>
+            <handler-sql id="selectAll${className}ByFamily" type="All">
+                <attributes>
+                    <name>selectorId</name>
+                    <name>selectorName</name>
+                    <name>selectorFamily</name>
+                </attributes>
+                <query>
+                    <![CDATA[
+                    select  SELECTOR_ID,
+                            SELECTOR_NAME,
+                            SELECTOR_FAMILY
+                    from PM_BROADCAST_SELECTOR
+                    where SELECTOR_FAMILY = ?
+                    order by SELECTOR_NAME
+                    ]]>
+                </query>
+                <arg type="string">family</arg>
+            </handler-sql>
+            <handler-select id="select${className}ById" type="By_Primary-Key"/>
+            <handler-sql id="selectBroadcastSectionBySelectionId" type="All">
+                <attributes>
+                    <name>selectorName</name>
+                </attributes>
+                <query>
+                    <![CDATA[
+                    select  SECTION_NAME
+                    from PM_BROADCAST_SECTION
+                    where SELECTION_ID = ?
+                    ]]>
+                </query>
+                <arg type="integer">selectionId</arg>
+            </handler-sql>
+            <sql-index>
+                <idx type="primary-key" name-prefix="X1_" clustered="false"/>
+            </sql-index>
+        </feature>
+
+        <primary-key key-generator="IDENTITY">
+            <field name="selectorId"/>
+        </primary-key>
+
+        <properties>
+            <field name="selectorId" type="big-decimal">
+                <description>Id de la sélection</description>
+                <sql type="numeric" identity="true" precision="28" required="true"/>
+            </field>
+            <field name="selectorName" type="string">
+                <description>Libellé de la sélection</description>
+                <sql type="varchar" precision="100" required="true"/>
+            </field>
+
+            <field name="selectorQuery" type="string">
+                <description>Requête SQL de sélection</description>
+                <sql type="text" required="true"/>
+            </field>
+
+            <field name="selectorFamily" type="string">
+                <description>Famille de la sélection</description>
+                <sql type="varchar" precision="100" required="true"/>
+            </field>
+        </properties>
+    </entity>
+</entities>

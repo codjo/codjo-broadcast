@@ -1,0 +1,27 @@
+net.codjo.broadcast.server
+	-> net.codjo.broadcast.common
+	-> net.codjo.broadcast.common.columns
+	-> net.codjo.broadcast.common.diffuser
+	-> net.codjo.database.common.api
+	-> net.codjo.datagen
+	-> net.codjo.sql.builder
+	-> net.codjo.test.common
+	-> net.codjo.test.common.fixture
+	-> net.codjo.test.common.mock
+	-> fakedb
+net.codjo.broadcast.server.api
+	-> net.codjo.broadcast.common
+
+net.codjo.broadcast.server.audit
+	-> net.codjo.workflow.common.message
+
+net.codjo.broadcast.server.plugin
+	-> net.codjo.agent
+	-> net.codjo.agent.test
+	-> net.codjo.broadcast.common
+	-> net.codjo.broadcast.common.message
+	-> net.codjo.broadcast.server.api
+	-> net.codjo.database.common.api
+	-> net.codjo.sql.server
+	-> net.codjo.test.common
+	-> net.codjo.workflow.common.message

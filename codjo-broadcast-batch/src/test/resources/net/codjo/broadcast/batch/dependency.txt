@@ -1,0 +1,5 @@
+net.codjo.broadcast.batch.plugin
+	-> net.codjo.broadcast.common.message
+	-> net.codjo.plugin.common
+	-> net.codjo.workflow.common.batch
+	-> net.codjo.workflow.common.message
