@@ -1,7 +1,4 @@
 package net.codjo.broadcast.server;
-import net.codjo.broadcast.common.Context;
-import net.codjo.test.common.LogString;
-import net.codjo.test.common.mock.ConnectionMock;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +8,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import junit.framework.TestCase;
+import net.codjo.broadcast.common.Context;
+import net.codjo.test.common.LogString;
+import net.codjo.test.common.mock.ConnectionMock;
 /**
  *
  */
@@ -19,7 +19,7 @@ public class DefaultFileGeneratorTest extends TestCase {
     private Context context;
     private DefaultFileGenerator fileGenerator;
     private FileSectionGenerator[] sections;
-    private Connection connection = new ConnectionMock();
+    private Connection connection = new ConnectionMock().getStub();
     private LogString log = new LogString();
     private StringWriter generated = new StringWriter();
 
@@ -101,7 +101,7 @@ public class DefaultFileGeneratorTest extends TestCase {
 
         fileGenerator.generate(context, connection);
 
-        log.assertContent("BOBO use ConnectionMock");
+        log.assertContent("BOBO use good connection");
     }
 
 
@@ -148,7 +148,7 @@ public class DefaultFileGeneratorTest extends TestCase {
                 return 0;
             }
             else {
-                log.info(content + " use " + connection.getClass().getSimpleName());
+                log.info(content + " use " + (connection == null ? "connection is null" : "good connection"));
                 os.println(content);
                 return 1;
             }
