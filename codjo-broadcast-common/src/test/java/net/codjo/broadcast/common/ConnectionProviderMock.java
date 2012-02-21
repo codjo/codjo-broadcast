@@ -11,7 +11,7 @@ import java.sql.Connection;
  */
 public class ConnectionProviderMock implements ConnectionProvider {
     public Connection getConnection() {
-        return new ConnectionMock();
+        return new ConnectionMock().getStub();
     }
 
 
