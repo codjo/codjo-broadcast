@@ -48,7 +48,9 @@
         </dependency>
         <dependency>
             <groupId>net.codjo.database</groupId>
-            <artifactId>codjo-database-main</artifactId>
+            <artifactId>codjo-database-${databaseType}</artifactId>
+            <optional>true</optional>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>net.codjo.datagen</groupId>
@@ -79,7 +81,7 @@
     -->
 
     <name>Lib &gt; Broadcast &gt; Server</name>
-    <description>Module serveur d'export</description>
+    <description>Module to export data from database</description>
     <inceptionYear>2007</inceptionYear>
     <!--
     | Build Settings

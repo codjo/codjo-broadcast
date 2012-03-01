@@ -8,7 +8,7 @@
 
     <parent>
         <groupId>net.codjo.pom</groupId>
-        <artifactId>codjo-pom-library</artifactId>
+        <artifactId>codjo-pom-external</artifactId>
         <version>SNAPSHOT</version>
     </parent>
     <groupId>net.codjo.broadcast</groupId>
@@ -67,7 +67,7 @@
     -->
 
     <name>Lib &gt; Broadcast</name>
-    <description>Regroupement des differentes librairies permettant de faire des exports.</description>
+    <description>Modules for data export.</description>
     <inceptionYear>2003</inceptionYear>
 
     <!--
