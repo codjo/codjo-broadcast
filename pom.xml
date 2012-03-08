@@ -26,7 +26,6 @@
                 <artifactId>codjo-broadcast-common</artifactId>
                 <version>${project.version}</version>
                 <classifier>tests</classifier>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>net.codjo.broadcast</groupId>
