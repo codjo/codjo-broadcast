@@ -4,6 +4,7 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.common.columns;
+import java.sql.ResultSet;
 import net.codjo.sql.builder.FieldInfo;
 import net.codjo.sql.builder.TableName;
 import fakedb.FakeResultSet;
@@ -15,12 +16,7 @@ import junit.framework.TestCase;
 import org.apache.log4j.BasicConfigurator;
 
 public class NumberColumnGeneratorTest extends TestCase {
-    private static final FieldInfo fieldInfo = new FieldInfo(new TableName("TABLE_A"), "FIELD_A", 1);
-
-
-    public NumberColumnGeneratorTest(String name) {
-        super(name);
-    }
+    private static final FieldInfo FIELD_INFO = new FieldInfo(new TableName("TABLE_A"), "FIELD_A", 1);
 
 
     public void test_with_Expression() throws Exception {
@@ -37,7 +33,7 @@ public class NumberColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"COL_1", "FIELD_B", "FIELD_C"},
                              {new BigDecimal("5.00"), null, "FININF"},
                              {null, null, "FININF"}};
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         // Lancement du test
@@ -51,7 +47,7 @@ public class NumberColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"FIELD_A", "FIELD_B", "FIELD_C"},
                              {Date.valueOf("1966-10-10"), null, "FININF"}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         NumberColumnGenerator ncg =
@@ -102,16 +98,16 @@ public class NumberColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"TABLE_A_FIELD_A", "COL_1", "TABLE_A_FIELD_C"},
                              {null, null, "FININF"}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         Padder padder = new Padder(" ", 10, false);
 
         NumberColumnGenerator ncg =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ".", "#,###.##", null);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ".", "#,###.##", null);
 
         NumberColumnGenerator ncgTwin =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ".", "#,###.##", padder);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ".", "#,###.##", padder);
 
         assertEquals(ncg.proceedField(rs), "");
         assertEquals(ncgTwin.proceedField(rs), "          ");
@@ -122,15 +118,15 @@ public class NumberColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"COL_1", "TABLE_A_FIELD_B", "TABLE_A_FIELD_C"},
                              {new BigDecimal("12233.2500"), null, "FININF"}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         Padder padder = new Padder("0", 12, false);
 
         NumberColumnGenerator ncg =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ",", "0.0000", padder);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ",", "0.0000", padder);
         NumberColumnGenerator ncgTwin =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ",", "0.0000", null);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ",", "0.0000", null);
 
         assertEquals(ncg.proceedField(rs), "0012233,2500");
         assertEquals(ncgTwin.proceedField(rs), "12233,2500");
@@ -141,15 +137,15 @@ public class NumberColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"COL_1", "TABLE_A_FIELD_B", "TABLE_A_FIELD_C"},
                              {new BigDecimal("0.2500"), null, "FININF"}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         Padder padder = new Padder("0", 12, false);
 
         NumberColumnGenerator ncg =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ",", "0.0000", padder);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ",", "0.0000", padder);
         NumberColumnGenerator ncgTtwin =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ",", "0.0000", null);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ",", "0.0000", null);
 
         assertEquals(ncg.proceedField(rs), "0000000,2500");
         assertEquals(ncgTtwin.proceedField(rs), "0,2500");
@@ -160,15 +156,15 @@ public class NumberColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"COL_1", "TABLE_A_FIELD_B", "TABLE_A_FIELD_C"},
                              {new Double("122.25"), null, "FININF"}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         Padder padder = new Padder("0", 10, false);
 
         NumberColumnGenerator ncg =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ",", "#,###.##", padder);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ",", "#,###.##", padder);
         NumberColumnGenerator ncgTwin =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ",", "#,###.##", null);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ",", "#,###.##", null);
 
         assertEquals(ncg.proceedField(rs), "0000122,25");
         assertEquals(ncgTwin.proceedField(rs), "122,25");
@@ -179,15 +175,15 @@ public class NumberColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"COL_1", "TABLE_A_FIELD_B", "TABLE_A_FIELD_C"},
                              {new Double("122"), null, "FININF"}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         Padder padder = new Padder("0", 10, false);
 
         NumberColumnGenerator ncg =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ".", "#,###.##", padder);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ".", "#,###.##", padder);
         NumberColumnGenerator ncgTwin =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ".", "#,###.##", null);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ".", "#,###.##", null);
 
         assertEquals(ncg.proceedField(rs), "0000000122");
         assertEquals(ncgTwin.proceedField(rs), "122");
@@ -198,15 +194,15 @@ public class NumberColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"COL_1", "TABLE_A_FIELD_B", "TABLE_A_FIELD_C"},
                              {new Double("122.25"), null, "FININF"}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         Padder padder = new Padder("0", 10, false);
 
         NumberColumnGenerator ncg =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ".", "#,###.##", padder);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ".", "#,###.##", padder);
         NumberColumnGenerator ncgTwin =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ".", "#,###.##", null);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ".", "#,###.##", null);
 
         assertEquals(ncg.proceedField(rs), "0000122.25");
         assertEquals(ncgTwin.proceedField(rs), "122.25");
@@ -217,15 +213,15 @@ public class NumberColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"COL_1", "TABLE_A_FIELD_B", "TABLE_A_FIELD_C"},
                              {new Integer("12225"), null, "FININF"}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         Padder padder = new Padder("0", 10, false);
 
         NumberColumnGenerator ncg =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ",", "#", padder);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ",", "#", padder);
         NumberColumnGenerator ncgTwin =
-              new NumberColumnGenerator(fieldInfo, "DEST_FIELD", ",", "#", null);
+              new NumberColumnGenerator(FIELD_INFO, "DEST_FIELD", ",", "#", null);
 
         assertEquals(ncg.proceedField(rs), "0000012225");
         assertEquals(ncgTwin.proceedField(rs), "12225");

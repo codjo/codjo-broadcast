@@ -1,4 +1,13 @@
 package net.codjo.broadcast.server;
+import fakedb.FakeResultSet;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import net.codjo.broadcast.common.Context;
 import net.codjo.broadcast.common.Preferences;
 import net.codjo.broadcast.common.PreferencesForTesting;
@@ -7,27 +16,20 @@ import net.codjo.broadcast.common.columns.FileColumnGenerator;
 import net.codjo.database.common.api.JdbcFixture;
 import net.codjo.datagen.DatagenFixture;
 import net.codjo.sql.builder.FieldInfo;
-import fakedb.FakeResultSet;
-import java.io.File;
-import static java.math.BigDecimal.valueOf;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static java.math.BigDecimal.valueOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 /**
  *
  */
 public class FileColumnHomeTest {
-    private static final DatagenFixture datagen = new DatagenFixture(BroadcasterHomeTest.class);
+    private static final DatagenFixture DATAGEN = new DatagenFixture(BroadcasterHomeTest.class);
     private static final int CONTENT_ID = 1000;
     private static final int FILE_ID = 1000;
     private static final int SECTION_ID = 1000;
@@ -40,7 +42,7 @@ public class FileColumnHomeTest {
 
     @Test
     public void test_buildFieldInfo() throws Exception {
-        FakeResultSet rs = new FakeResultSet(new Object[][]{
+        ResultSet rs = new FakeResultSet(new Object[][]{
               {"COLUMN_NUMBER", "DB_FIELD_NAME", "DB_TABLE_NAME"},
               {new Integer("10"), "CODE", "AP_VALUATION_TYPE as VALUATION_FRE_VALUATION_TY_REF"},
               {new Integer("70"), "VALUATION_DATE", "AP_FUND_PRICE"},
@@ -54,7 +56,7 @@ public class FileColumnHomeTest {
               {new Integer("100"), "CODE", "AP_VALUATION_TYPE as BALANCE_CURRE_VALUATION_TY_REF"},
               {new Integer("110"), "DIVIDEND_DATE", "AP_DIVIDEND"},
               {new Integer("120"), "LABEL", "AP_COMMERCIAL as RISK_LEVEL_COMMERCIAL_REF"}
-        });
+        }).getStub();
         Map<FieldInfo, FieldInfo> map = new HashMap<FieldInfo, FieldInfo>();
         for (int i = 0; i < 12; i++) {
             rs.next();
@@ -109,14 +111,14 @@ public class FileColumnHomeTest {
 
     @BeforeClass
     public static void setUpGlobal() throws Exception {
-        datagen.doSetUp();
-        datagen.generate();
+        DATAGEN.doSetUp();
+        DATAGEN.generate();
     }
 
 
     @AfterClass
     public static void tearDownGlobal() throws Exception {
-        datagen.doTearDown();
+        DATAGEN.doTearDown();
     }
 
 
@@ -157,7 +159,7 @@ public class FileColumnHomeTest {
         stmt.executeUpdate("insert into " + prefManager.getColumnsTableName()
                            + " (COLUMNS_ID, SECTION_ID, DB_TABLE_NAME, DB_FIELD_NAME, COLUMN_NAME,"
                            + " RIGHT_COLUMN_PADDING, PADDING_CARACTER, COLUMN_DATE_FORMAT,COLUMN_NUMBER,"
-                           +" BREAK_FIELD)"
+                           + " BREAK_FIELD)"
                            + " values(1, " + sectionID + ",'PM_BROADCAST_COLUMNS','DB_FIELD_NAME','Champ'"
                            + ", 0, null,null,1,1)");
 
@@ -173,7 +175,7 @@ public class FileColumnHomeTest {
         stmt.executeUpdate("insert into " + prefManager.getColumnsTableName()
                            + " (COLUMNS_ID, SECTION_ID," + " DB_TABLE_NAME, DB_FIELD_NAME, COLUMN_NAME,"
                            + " RIGHT_COLUMN_PADDING, PADDING_CARACTER, COLUMN_DATE_FORMAT,COLUMN_NUMBER,"
-                           +" BREAK_FIELD)"
+                           + " BREAK_FIELD)"
                            + " values(3, " + sectionID + ",'" + preference.getComputedTableName() + "'"
                            + ",'DATE_HEURE','Date de génération'" + ", 1, ' ','dd-mm-yy',4,0)");
 
@@ -182,7 +184,7 @@ public class FileColumnHomeTest {
         stmt.executeUpdate("insert into " + prefManager.getColumnsTableName()
                            + " (COLUMNS_ID, SECTION_ID," + " DB_TABLE_NAME, DB_FIELD_NAME, COLUMN_NAME,"
                            + " RIGHT_COLUMN_PADDING, PADDING_CARACTER, COLUMN_DATE_FORMAT,COLUMN_NUMBER,"
-                           +" BREAK_FIELD)"
+                           + " BREAK_FIELD)"
                            + " values(4, " + sectionID + ",'" + preference.getComputedTableName() + "'"
                            + ",'DATE_HEURE','Date de génération'" + ", 1, ' ','dd-mm-yy',5,0)");
     }
@@ -212,6 +214,6 @@ public class FileColumnHomeTest {
 
 
     private void create(String tableName) {
-        jdbc.advanced().executeCreateTableScriptFile(new File(datagen.getSqlPath(), tableName + ".tab"));
+        jdbc.advanced().executeCreateTableScriptFile(new File(DATAGEN.getSqlPath(), tableName + ".tab"));
     }
 }

@@ -4,6 +4,7 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.common.columns;
+import java.sql.ResultSet;
 import net.codjo.sql.builder.FieldInfo;
 import net.codjo.sql.builder.TableName;
 import fakedb.FakeResultSet;
@@ -12,18 +13,13 @@ import java.sql.SQLException;
 import java.sql.Types;
 import junit.framework.TestCase;
 public class BooleanColumnGeneratorTest extends TestCase {
-    FieldInfo fieldInfo = new FieldInfo(new TableName("TABLE_A"), "FIELD_A", 1);
-
-
-    public BooleanColumnGeneratorTest(String name) {
-        super(name);
-    }
+    private FieldInfo fieldInfo = new FieldInfo(new TableName("TABLE_A"), "FIELD_A", 1);
 
 
     public void test_convertField_fieldNotFound() throws Exception {
         Object[][] matrix = {{"FIELD_A", "FIELD_B", "FIELD_C"}, {Date.valueOf("1966-10-10"), null, "FININF"}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         BooleanColumnGenerator bcg = new BooleanColumnGenerator(fieldInfo, "DEST_FIELD", null);
@@ -66,7 +62,7 @@ public class BooleanColumnGeneratorTest extends TestCase {
     public void test_proceedField() throws Exception {
         Object[][] matrix = {{"COL_1", "XXX", "COL_2"}, {Boolean.TRUE, Boolean.TRUE, Boolean.FALSE}};
 
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         Padder padder = new Padder(" ", 20, false);
@@ -94,7 +90,7 @@ public class BooleanColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"COL_1", "FIELD_B", "FIELD_C"},
                              {Boolean.TRUE, null, "FININF"},
                              {null, null, "FININF"}};
-        FakeResultSet rs = new FakeResultSet(matrix);
+        ResultSet rs = new FakeResultSet(matrix).;
         rs.next();
 
         // Lancement du test
