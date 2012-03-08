@@ -90,7 +90,7 @@ public class BooleanColumnGeneratorTest extends TestCase {
         Object[][] matrix = {{"COL_1", "FIELD_B", "FIELD_C"},
                              {Boolean.TRUE, null, "FININF"},
                              {null, null, "FININF"}};
-        ResultSet rs = new FakeResultSet(matrix).;
+        ResultSet rs = new FakeResultSet(matrix).getStub();
         rs.next();
 
         // Lancement du test
