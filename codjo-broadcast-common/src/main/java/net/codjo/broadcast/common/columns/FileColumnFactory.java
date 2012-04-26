@@ -51,6 +51,7 @@ public class FileColumnFactory {
                                                isBreakField);
             case Types.DOUBLE:
             case Types.INTEGER:
+            case Types.DECIMAL:
             case Types.NUMERIC:
                 String decimalSeparator = rs.getString(DECIMAL_SEPARATOR_FIELD_NAME);
                 String numberFormat = rs.getString(NUMBER_FORMAT_FIELD_NAME);
@@ -59,7 +60,7 @@ public class FileColumnFactory {
             case Types.BIT:
                 return new BooleanColumnGenerator(fieldInfo, columnName, padder, expression, isBreakField);
             default:
-                throw new IllegalArgumentException("Type SQL inconnue : " + sqlType);
+                throw new IllegalArgumentException("Type SQL inconnu : " + sqlType);
         }
     }
 
