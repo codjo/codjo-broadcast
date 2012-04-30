@@ -1,11 +1,14 @@
 package net.codjo.broadcast.server;
-import net.codjo.broadcast.common.Context;
-import net.codjo.broadcast.common.Selector;
-import net.codjo.broadcast.server.api.SqlUtil;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Statement;
+import net.codjo.broadcast.common.Context;
+import net.codjo.broadcast.common.Selector;
+import net.codjo.broadcast.server.api.SqlUtil;
+import net.codjo.database.common.api.DatabaseFactory;
+import net.codjo.database.common.api.DatabaseQueryHelper;
+import net.codjo.database.common.api.structure.SqlTable;
 
 public abstract class AbstractSelector implements Selector {
 
@@ -59,7 +62,12 @@ public abstract class AbstractSelector implements Selector {
 
     protected void createTempTable(Connection connection, String tableName, String body) throws SQLException {
         SqlUtil.dropTable(connection, tableName);
-        executeUpdate(connection, "create table " + tableName + " (" + body + " )");
+        DatabaseQueryHelper queryHelper = new DatabaseFactory().getDatabaseQueryHelper();
+
+        executeUpdate(connection,
+                      queryHelper.buildCreateTableQuery(SqlTable.temporaryTable(tableName), body));
+//                      "create table " + tableName + " (" + body + " )");
+//                      "create global temporary table " + tableName + " (" + body + " ) on commit delete rows");
     }
 
 
