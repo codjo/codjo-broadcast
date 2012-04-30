@@ -5,7 +5,6 @@ net.codjo.broadcast.server
 	-> net.codjo.broadcast.common.diffuser
 	-> net.codjo.broadcast.server.api
 	-> net.codjo.database.common.api
-	-> net.codjo.database.common.api.structure
 	-> net.codjo.database.common.impl.sqlfield
 	-> net.codjo.sql.builder
 	-> net.codjo.util.file

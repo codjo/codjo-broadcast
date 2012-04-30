@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <entities>
-    <entity name="net.codjo.broadcast.common.data.BroadcastFiles" table="PM_BROADCAST_FILES" order-clause="fileId">
+    <entity name="net.codjo.broadcast.common.data.BroadcastFiles"
+            table="PM_BROADCAST_FILES">
         <description>Fichier export</description>
         <feature>
             <generate-all/>
@@ -63,15 +64,14 @@
             </field>
         </properties>
     </entity>
-    <entity name="net.codjo.broadcast.common.data.BroadcastFileContents" table="PM_BROADCAST_FILE_CONTENTS"
-            order-clause="contentId">
+    <entity name="net.codjo.broadcast.common.data.BroadcastFileContents"
+            table="PM_BROADCAST_FILE_CONTENTS">
         <description>Contenu des fichiers exports</description>
         <feature>
             <generate-all/>
             <handler-select id="selectBroadcastFileContentsByFileId">
                 <query type="OQL">SELECT p FROM net.codjo.broadcast.common.data.BroadcastFileContents p
-                    WHERE fileId = $1
-                </query>
+                    WHERE fileId = $1</query>
                 <arg>fileId</arg>
             </handler-select>
             <handler-sql id="selectNamesBroadcastFileContentsByFileId">
@@ -159,15 +159,14 @@
             </field>
         </properties>
     </entity>
-    <entity name="net.codjo.broadcast.common.data.BroadcastColumns" table="PM_BROADCAST_COLUMNS"
-            order-clause="columnsId">
+    <entity name="net.codjo.broadcast.common.data.BroadcastColumns"
+            table="PM_BROADCAST_COLUMNS">
         <description>Colonnes des exports</description>
         <feature>
             <generate-all/>
             <handler-select id="selectBroadcastColumnsBySectionId">
                 <query type="OQL">SELECT p FROM net.codjo.broadcast.common.data.BroadcastColumns p
-                    WHERE sectionId = $1 ORDER BY columnNumber
-                </query>
+                    WHERE sectionId = $1 ORDER BY columnNumber</query>
                 <arg>sectionId</arg>
             </handler-select>
             <trigger-iu>
@@ -245,8 +244,8 @@
             </field>
         </properties>
     </entity>
-    <entity name="net.codjo.broadcast.common.data.BroadcastSections" table="PM_BROADCAST_SECTION"
-            order-clause="sectionId">
+    <entity name="net.codjo.broadcast.common.data.BroadcastSections"
+            table="PM_BROADCAST_SECTION">
         <description>Sections d&apos;export</description>
         <feature>
             <generate-all/>
