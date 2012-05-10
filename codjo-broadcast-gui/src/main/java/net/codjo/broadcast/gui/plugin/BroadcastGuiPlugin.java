@@ -183,10 +183,10 @@ public final class BroadcastGuiPlugin extends AbstractInternationalizableGuiPlug
                   new FinalStep("Exporter...",
                                 new BroadcastVtomCaller(new CommandFile(file)),
                                 new BroadcastWizardSummaryGui(guiContext),
-                                new DefaultJobGui("Traitement VTOM"),
+                                new DefaultJobGui(guiContext, "Traitement VTOM"),
                                 new FinalStep.JobGuiData[]{
                                       new FinalStep.JobGuiData(
-                                            new DefaultJobGui("Export des données"),
+                                            new DefaultJobGui(guiContext, "Export des données"),
                                             new BroadcastTemplateRequestFactory())
                                 });
 
