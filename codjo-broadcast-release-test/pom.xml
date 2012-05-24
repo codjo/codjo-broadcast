@@ -11,7 +11,7 @@
     <parent>
         <groupId>net.codjo.broadcast</groupId>
         <artifactId>codjo-broadcast</artifactId>
-        <version>6.52-SNAPSHOT</version>
+        <version>6.53-SNAPSHOT</version>
     </parent>
     <dependencies>
         <dependency>
