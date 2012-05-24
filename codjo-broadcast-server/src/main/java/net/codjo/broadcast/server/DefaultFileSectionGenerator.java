@@ -4,13 +4,6 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.server;
-import net.codjo.broadcast.common.BroadcastException;
-import net.codjo.broadcast.common.ComputedFieldGenerator;
-import net.codjo.broadcast.common.Context;
-import net.codjo.broadcast.common.Preferences;
-import net.codjo.broadcast.common.Selector;
-import net.codjo.broadcast.common.columns.FileColumnGenerator;
-import net.codjo.broadcast.common.columns.GenerationException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -19,6 +12,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import net.codjo.broadcast.common.BroadcastException;
+import net.codjo.broadcast.common.ComputedFieldGenerator;
+import net.codjo.broadcast.common.Context;
+import net.codjo.broadcast.common.Preferences;
+import net.codjo.broadcast.common.Selector;
+import net.codjo.broadcast.common.columns.FileColumnGenerator;
+import net.codjo.broadcast.common.columns.GenerationException;
 import org.apache.log4j.Logger;
 /**
  * Générateur de section par défaut.
@@ -153,7 +153,8 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
         for (int i = 0; i < columns.length; i++) {
             if (!columns[i].isBreakField() && isBreak) {
                 writer.println();
-            } else if (columnSeparator != null && i > 0) {
+            }
+            else if (columnSeparator != null && i > 0) {
                 writer.print(columnSeparator);
             }
 
@@ -181,13 +182,14 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
             ResultSet rs = executeQuery(statement, query);
             while (rs.next()) {
                 sectionLines++;
-                canWriteValue=false;
+                canWriteValue = false;
                 applyBreakLine = checkBreak(breakFields, rs);
-                
+
                 for (int i = 0; i < columns.length; i++) {
                     if (!columns[i].isBreakField() && isPreviousColumnBreak && applyBreakLine) {
                         writer.println();
-                    } else if (columnSeparator != null && canWriteValue) {
+                    }
+                    else if (columnSeparator != null && canWriteValue) {
                         writer.print(columnSeparator);
                     }
 
@@ -213,13 +215,14 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
     private boolean checkWriteValue(String value, boolean applyBreakLine, Map<Integer, String> breakFields,
                                     int indexColumn) throws SQLException, GenerationException {
 
-        boolean isWritable=false;
+        boolean isWritable = false;
         if (columns[indexColumn].isBreakField()) {
             if (applyBreakLine) {
-                isWritable=true;
+                isWritable = true;
             }
-        } else {
-            isWritable=true;
+        }
+        else {
+            isWritable = true;
         }
         if (columns[indexColumn].isBreakField()) {
             breakFields.put(indexColumn, value);
