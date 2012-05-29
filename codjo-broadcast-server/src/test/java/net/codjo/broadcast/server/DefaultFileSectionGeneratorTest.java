@@ -1,11 +1,4 @@
 package net.codjo.broadcast.server;
-import net.codjo.broadcast.common.ComputedFieldGenerator;
-import net.codjo.broadcast.common.Context;
-import net.codjo.broadcast.common.Preferences;
-import net.codjo.broadcast.common.PreferencesForTesting;
-import net.codjo.broadcast.common.columns.FileColumnGenerator;
-import net.codjo.sql.builder.FieldInfo;
-import net.codjo.sql.builder.TableName;
 import fakedb.FakeDriver;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -15,6 +8,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import junit.framework.TestCase;
+import net.codjo.broadcast.common.ComputedFieldGenerator;
+import net.codjo.broadcast.common.Context;
+import net.codjo.broadcast.common.Preferences;
+import net.codjo.broadcast.common.PreferencesForTesting;
+import net.codjo.broadcast.common.columns.FileColumnGenerator;
+import net.codjo.sql.builder.FieldInfo;
+import net.codjo.sql.builder.TableName;
 /**
  *
  */
@@ -243,7 +243,8 @@ public class DefaultFileSectionGeneratorTest extends TestCase {
         public String proceedField(ResultSet rs) throws SQLException {
             if (isValueChange) {
                 calledNumber++;
-            } else {
+            }
+            else {
                 calledNumber = 1;
             }
             return value + calledNumber;

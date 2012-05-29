@@ -19,6 +19,7 @@ import net.codjo.broadcast.common.Preferences;
 import net.codjo.broadcast.common.Selector;
 import net.codjo.broadcast.common.columns.FileColumnGenerator;
 import net.codjo.broadcast.common.columns.GenerationException;
+import net.codjo.database.common.api.DatabaseFactory;
 import org.apache.log4j.Logger;
 /**
  * Générateur de section par défaut.
@@ -68,18 +69,24 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
     public int generate(Context context, Connection connection, PrintWriter writer)
           throws IOException, SQLException, BroadcastException {
         java.sql.Date today = context.getToday();
+
+        TransactionManager transactionManager = new TransactionManager(connection);
         try {
             selector.proceed(context, connection, preference.getSelectionTableName(), today);
 
             computedField.generateComputedTable(context, columns, connection);
             String query = queryBuilder.buildQuery(columns);
 
-            return generateContent(context, connection, query, writer);
+            int contentResult = generateContent(context, connection, query, writer);
+            transactionManager.commit(connection);
+            return contentResult;
         }
         catch (GenerationException ex) {
+            transactionManager.rollback(connection);
             throw new BroadcastException(ex);
         }
         finally {
+            transactionManager.release(connection);
             cleanupTemporaryTables(context, connection, today);
         }
     }
@@ -251,5 +258,52 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
             return;
         }
         os.println(ctxt.replaceVariables(sectionHeader));
+    }
+
+
+    private class TransactionManager {
+        private boolean previousAutoCommitMode;
+        private boolean hasToChangeAutoCommit;
+
+
+        TransactionManager(Connection connection) throws SQLException {
+            previousAutoCommitMode = connection.getAutoCommit();
+            hasToChangeAutoCommit = hasToChangeAutoCommit();
+            if (hasToChangeAutoCommit) {
+                APP.debug("changing autocommit mode to false");
+                connection.setAutoCommit(false);
+            }
+        }
+
+
+        private boolean hasToChangeAutoCommit() {
+            return new DatabaseFactory().getDatabaseQueryHelper().hasDeleteRowStrategyOnTemporaryTable();
+        }
+
+
+        void release(Connection connection) throws SQLException {
+            if (hasToChangeAutoCommit) {
+                APP.debug("restoring autocommit to:" + previousAutoCommitMode);
+                if (connection != null) {
+                    connection.setAutoCommit(previousAutoCommitMode);
+                }
+            }
+        }
+
+
+        public void commit(Connection connection) throws SQLException {
+            if (hasToChangeAutoCommit && !connection.getAutoCommit()) {
+                APP.debug("Commiting datas");
+                connection.commit();
+            }
+        }
+
+
+        public void rollback(Connection connection) throws SQLException {
+            if (hasToChangeAutoCommit && !connection.getAutoCommit()) {
+                APP.debug("Rollbacking datas");
+                connection.rollback();
+            }
+        }
     }
 }
