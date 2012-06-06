@@ -4,6 +4,17 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.server;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import net.codjo.broadcast.common.Context;
 import net.codjo.broadcast.common.Preferences;
 import net.codjo.broadcast.common.PreferencesManager;
@@ -18,17 +29,6 @@ import net.codjo.sql.builder.JoinKey;
 import net.codjo.sql.builder.TableName;
 import net.codjo.variable.TemplateInterpreter;
 import net.codjo.variable.UnknownVariableException;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
 import org.apache.log4j.Logger;
 /**
  * Classe Home des colonnes de diffusions.
@@ -39,10 +39,11 @@ import org.apache.log4j.Logger;
 class FileColumnHome {
     private static final Logger APP = Logger.getLogger(FileColumnHome.class);
     private static final String QUERY_SELECT =
-          "select * " + "from $column$ column " + "inner join $section$ section "
-          + "  on column.SECTION_ID = section.SECTION_ID " + "inner join $fileContents$ contents "
-          + "  on contents.SECTION_ID = section.SECTION_ID " + "where contents.CONTENT_ID = ? "
-          + "order by column.COLUMN_NUMBER";
+          "select * " + "from $column$ broadcast_column " + "inner join $section$ section "
+          + "  on broadcast_column.SECTION_ID = section.SECTION_ID " + "inner join $fileContents$ broadcast_contents "
+          + "  on broadcast_contents.SECTION_ID = section.SECTION_ID " + "where broadcast_contents.CONTENT_ID = ? "
+          + "order by broadcast_column.COLUMN_NUMBER";
+
     private final DatabaseFactory databaseFactory = new DatabaseFactory();
     private FileColumnFactory factory = new FileColumnFactory();
     private Map<String, SQLFieldList> tableDefinition = new HashMap<String, SQLFieldList>();

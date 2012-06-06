@@ -4,13 +4,6 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.server;
-import net.codjo.broadcast.common.BroadcastException;
-import net.codjo.broadcast.common.ComputedFieldGenerator;
-import net.codjo.broadcast.common.Context;
-import net.codjo.broadcast.common.Preferences;
-import net.codjo.broadcast.common.Selector;
-import net.codjo.broadcast.common.columns.FileColumnGenerator;
-import net.codjo.broadcast.common.columns.GenerationException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -19,6 +12,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import net.codjo.broadcast.common.BroadcastException;
+import net.codjo.broadcast.common.ComputedFieldGenerator;
+import net.codjo.broadcast.common.Context;
+import net.codjo.broadcast.common.Preferences;
+import net.codjo.broadcast.common.Selector;
+import net.codjo.broadcast.common.columns.FileColumnGenerator;
+import net.codjo.broadcast.common.columns.GenerationException;
+import net.codjo.database.common.api.DatabaseFactory;
 import org.apache.log4j.Logger;
 /**
  * Générateur de section par défaut.
@@ -68,18 +69,24 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
     public int generate(Context context, Connection connection, PrintWriter writer)
           throws IOException, SQLException, BroadcastException {
         java.sql.Date today = context.getToday();
+
+        TransactionManager transactionManager = new TransactionManager(connection);
         try {
             selector.proceed(context, connection, preference.getSelectionTableName(), today);
 
             computedField.generateComputedTable(context, columns, connection);
             String query = queryBuilder.buildQuery(columns);
 
-            return generateContent(context, connection, query, writer);
+            int contentResult = generateContent(context, connection, query, writer);
+            transactionManager.commit(connection);
+            return contentResult;
         }
         catch (GenerationException ex) {
+            transactionManager.rollback(connection);
             throw new BroadcastException(ex);
         }
         finally {
+            transactionManager.release(connection);
             cleanupTemporaryTables(context, connection, today);
         }
     }
@@ -153,7 +160,8 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
         for (int i = 0; i < columns.length; i++) {
             if (!columns[i].isBreakField() && isBreak) {
                 writer.println();
-            } else if (columnSeparator != null && i > 0) {
+            }
+            else if (columnSeparator != null && i > 0) {
                 writer.print(columnSeparator);
             }
 
@@ -181,13 +189,14 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
             ResultSet rs = executeQuery(statement, query);
             while (rs.next()) {
                 sectionLines++;
-                canWriteValue=false;
+                canWriteValue = false;
                 applyBreakLine = checkBreak(breakFields, rs);
-                
+
                 for (int i = 0; i < columns.length; i++) {
                     if (!columns[i].isBreakField() && isPreviousColumnBreak && applyBreakLine) {
                         writer.println();
-                    } else if (columnSeparator != null && canWriteValue) {
+                    }
+                    else if (columnSeparator != null && canWriteValue) {
                         writer.print(columnSeparator);
                     }
 
@@ -213,13 +222,14 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
     private boolean checkWriteValue(String value, boolean applyBreakLine, Map<Integer, String> breakFields,
                                     int indexColumn) throws SQLException, GenerationException {
 
-        boolean isWritable=false;
+        boolean isWritable = false;
         if (columns[indexColumn].isBreakField()) {
             if (applyBreakLine) {
-                isWritable=true;
+                isWritable = true;
             }
-        } else {
-            isWritable=true;
+        }
+        else {
+            isWritable = true;
         }
         if (columns[indexColumn].isBreakField()) {
             breakFields.put(indexColumn, value);
@@ -248,5 +258,52 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
             return;
         }
         os.println(ctxt.replaceVariables(sectionHeader));
+    }
+
+
+    private class TransactionManager {
+        private boolean previousAutoCommitMode;
+        private boolean hasToChangeAutoCommit;
+
+
+        TransactionManager(Connection connection) throws SQLException {
+            previousAutoCommitMode = connection.getAutoCommit();
+            hasToChangeAutoCommit = hasToChangeAutoCommit();
+            if (hasToChangeAutoCommit) {
+                APP.debug("changing autocommit mode to false");
+                connection.setAutoCommit(false);
+            }
+        }
+
+
+        private boolean hasToChangeAutoCommit() {
+            return new DatabaseFactory().getDatabaseQueryHelper().hasDeleteRowStrategyOnTemporaryTable();
+        }
+
+
+        void release(Connection connection) throws SQLException {
+            if (hasToChangeAutoCommit) {
+                APP.debug("restoring autocommit to:" + previousAutoCommitMode);
+                if (connection != null) {
+                    connection.setAutoCommit(previousAutoCommitMode);
+                }
+            }
+        }
+
+
+        public void commit(Connection connection) throws SQLException {
+            if (hasToChangeAutoCommit && !connection.getAutoCommit()) {
+                APP.debug("Commiting datas");
+                connection.commit();
+            }
+        }
+
+
+        public void rollback(Connection connection) throws SQLException {
+            if (hasToChangeAutoCommit && !connection.getAutoCommit()) {
+                APP.debug("Rollbacking datas");
+                connection.rollback();
+            }
+        }
     }
 }

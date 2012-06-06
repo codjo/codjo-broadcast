@@ -65,12 +65,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>net.codjo.mad</groupId>
-            <artifactId>codjo-mad-gui</artifactId>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>net.codjo.security</groupId>
             <artifactId>codjo-security-common</artifactId>
             <classifier>tests</classifier>
