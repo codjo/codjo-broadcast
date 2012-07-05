@@ -72,9 +72,9 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
 
         TransactionManager transactionManager = new TransactionManager(connection);
         try {
+            computedField.createComputedTable(context, columns, connection);
             selector.proceed(context, connection, preference.getSelectionTableName(), today);
-
-            computedField.generateComputedTable(context, columns, connection);
+            computedField.fillComputedTable(context, connection);
             String query = queryBuilder.buildQuery(columns);
 
             int contentResult = generateContent(context, connection, query, writer);
@@ -186,7 +186,8 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
         generateColumnHeader(writer);
         Statement statement = connection.createStatement();
         try {
-            ResultSet rs = executeQuery(statement, query);
+            String query1 = context.replaceVariables(query);
+            ResultSet rs = executeQuery(statement, query1);
             while (rs.next()) {
                 sectionLines++;
                 canWriteValue = false;

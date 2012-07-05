@@ -64,7 +64,6 @@ public class MockComputedContext implements ComputedContext {
 
     public String replaceVariables(String template)
             throws IllegalArgumentException {
-        throw new java.lang.UnsupportedOperationException(
-            "La méthode replaceVariables() n'est pas encore implémentée.");
+        return template;
     }
 }

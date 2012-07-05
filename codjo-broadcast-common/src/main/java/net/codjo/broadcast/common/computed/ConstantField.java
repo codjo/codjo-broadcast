@@ -40,8 +40,8 @@ public class ConstantField extends AbstractComputedField {
     public void compute(ComputedContext ctxt, Connection con)
             throws SQLException {
         PreparedStatement stmt =
-            con.prepareStatement("update " + ctxt.getComputedTableName() + " set "
-                + getName() + " = ?");
+            con.prepareStatement(ctxt.replaceVariables("update " + ctxt.getComputedTableName() + " set "
+                         + getName() + " = ?"));
         try {
             if (value == null) {
                 stmt.setNull(1, getSqlType());

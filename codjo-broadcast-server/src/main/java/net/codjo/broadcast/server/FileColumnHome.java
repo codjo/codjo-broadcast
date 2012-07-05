@@ -202,7 +202,7 @@ class FileColumnHome {
         SQLFieldList fieldList = tableDefinition.get(family + "_" + joinKeyName);
         if (fieldList == null) {
             throw new NoSuchElementException("La table >" + joinKeyName
-                                             + "< ne fait pas partie des tables utilisable "
+                                             + "< ne fait pas partie des tables utilisables "
                                              + "pour la diffusion");
         }
         try {

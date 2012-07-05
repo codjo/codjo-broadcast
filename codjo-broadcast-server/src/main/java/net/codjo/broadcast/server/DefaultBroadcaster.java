@@ -4,6 +4,13 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.server;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import net.codjo.broadcast.common.BroadcastException;
 import net.codjo.broadcast.common.Broadcaster;
 import net.codjo.broadcast.common.ConnectionProvider;
@@ -13,13 +20,6 @@ import net.codjo.broadcast.common.PostBroadcaster;
 import net.codjo.broadcast.common.diffuser.Diffuser;
 import net.codjo.broadcast.common.diffuser.DiffuserException;
 import net.codjo.util.file.FileUtil;
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.log4j.Logger;
 /**
  * Génère et diffuse un fichier.
@@ -54,6 +54,11 @@ class DefaultBroadcaster implements Broadcaster {
         currentContext.connectTo(rootContext);
 
         Connection connection = connectionProvider.getConnection();
+        String databaseUserName = connection.getMetaData().getUserName();
+        if (databaseUserName != null) {
+            currentContext.putParameter("dbApplicationUser", databaseUserName);
+        }
+
         File tmpFile = null;
         try {
             tmpFile = fileGenerator.generate(currentContext, connection);

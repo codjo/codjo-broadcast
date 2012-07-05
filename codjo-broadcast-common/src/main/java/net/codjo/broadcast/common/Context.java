@@ -164,7 +164,14 @@ public class Context {
         TemplateInterpreter interpreter = new TemplateInterpreter();
         interpreter.addAsVariable(getParameters());
         try {
-            return interpreter.evaluate(template);
+            String before = template;
+            String after = interpreter.evaluate(template);
+
+            while(!after.equals(before)) {
+                before = after;
+                after = interpreter.evaluate(before);
+            }
+            return after;
         }
         catch (UnknownVariableException ex) {
             throw new IllegalArgumentException("La string >" + template

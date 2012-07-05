@@ -15,6 +15,7 @@ import net.codjo.broadcast.common.PreferencesForTesting;
 import net.codjo.broadcast.common.columns.FileColumnGenerator;
 import net.codjo.sql.builder.FieldInfo;
 import net.codjo.sql.builder.TableName;
+import net.codjo.test.common.LogString;
 /**
  *
  */
@@ -31,6 +32,7 @@ public class DefaultFileSectionGeneratorTest extends TestCase {
     private Connection connection;
     private StringWriter result = new StringWriter();
     private PrintWriter writer = new PrintWriter(result);
+    private LogString logger;
 
 
     /**
@@ -104,7 +106,7 @@ public class DefaultFileSectionGeneratorTest extends TestCase {
 
         assertTrue(selector.isProceedHasBeenCalled());
         assertTrue(selector.isCleanupHasBeenCalled());
-        assertTrue(computedField.hasBeenCalled);
+        logger.assertContent("createComputedTable()", "fillComputedTable()");
         assertEquals(2, columnA.calledNumber);
         assertEquals(2, columnB.calledNumber);
         assertTrue(queryBuilder.hasBeenCalled);
@@ -190,6 +192,7 @@ public class DefaultFileSectionGeneratorTest extends TestCase {
 
     @Override
     protected void setUp() throws SQLException {
+        logger = new LogString();
         preference = PreferencesForTesting.buildPreferences();
         columnA = new FakeColumnGenerator("A", false, true);
         columnB = new FakeColumnGenerator("B", false, true);
@@ -197,7 +200,7 @@ public class DefaultFileSectionGeneratorTest extends TestCase {
         String sectionName = "section pour TU";
         selector = new PreferencesForTesting.FakeSelector();
         queryBuilder = new FakeQueryBuilder(preference);
-        computedField = new FakeComputedField();
+        computedField = new FakeComputedField(logger);
 
         sectionGenerator = new DefaultFileSectionGenerator(preference, sectionName, selector, computedField,
                                                            queryBuilder,
@@ -262,17 +265,22 @@ public class DefaultFileSectionGeneratorTest extends TestCase {
     }
 
     private static final class FakeComputedField implements ComputedFieldGenerator {
-        boolean hasBeenCalled = false;
+        private LogString logger;
 
 
-        FakeComputedField() {
+        FakeComputedField(LogString logger) {
+            this.logger = logger;
         }
 
 
-        public void generateComputedTable(Context ctxt,
-                                          FileColumnGenerator[] fileColumnGenerator,
-                                          Connection con) {
-            hasBeenCalled = true;
+        public void createComputedTable(Context ctxt, FileColumnGenerator[] fileColumnGenerator, Connection con) {
+            logger.call("createComputedTable");
+        }
+
+
+        public void fillComputedTable(Context ctxt, Connection con)
+              throws SQLException {
+            logger.call("fillComputedTable");
         }
     }
 
