@@ -117,18 +117,18 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
     private void cleanupTemporaryTables(Context ctxt, Connection con, java.sql.Date today)
           throws SQLException {
         try {
-            selector.cleanup(ctxt, con, preference.getSelectionTableName(), today);
+            selector.cleanup(ctxt, con, ctxt.replaceVariables(preference.getSelectionTableName()), today);
         }
         finally {
-            dropComputedTable(con);
+            dropComputedTable(con, ctxt.replaceVariables(preference.getComputedTableName()));
         }
     }
 
 
-    private void dropComputedTable(Connection connection) throws SQLException {
+    private void dropComputedTable(Connection connection, String computedTableName) throws SQLException {
         Statement statement = connection.createStatement();
         try {
-            statement.executeUpdate("drop table " + preference.getComputedTableName());
+            statement.executeUpdate("drop table " + computedTableName);
         }
         catch (SQLException ex) {
             ; // Erreur sans incidence

@@ -1,10 +1,10 @@
 package net.codjo.broadcast.server.api;
-import net.codjo.util.file.FileUtil;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import net.codjo.util.file.FileUtil;
 import org.apache.log4j.Logger;
 /**
  *
@@ -29,8 +29,7 @@ public class SqlUtil {
     }
 
 
-    public static void deleteTable(Connection con, String tableName)
-          throws SQLException {
+    public static void deleteTable(Connection con, String tableName) throws SQLException {
         Statement stmt = con.createStatement();
         try {
             LOG.debug("vidage de la table : " + tableName);
@@ -42,16 +41,14 @@ public class SqlUtil {
     }
 
 
-    public static void dropTable(Connection con, String tableName)
-          throws SQLException {
+    public static void dropTable(Connection con, String tableName) throws SQLException {
         Statement stmt = con.createStatement();
         try {
             LOG.debug("supression de la table : " + tableName);
             stmt.executeUpdate("drop table " + tableName);
         }
         catch (SQLException ex) {
-            LOG.info("La table temporaire : " + tableName + " n'a pas été supprimé "
-                     + ex.getMessage());
+            LOG.info("La table temporaire : " + tableName + " n'a pas été supprimé " + ex.getMessage());
         }
         finally {
             stmt.close();
