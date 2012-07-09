@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import net.codjo.broadcast.common.ComputedContextAdapter;
@@ -35,7 +34,7 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
     private Set fieldList;
 
 
-    public DefaultComputedFieldGenerator(Preferences preference) {
+    DefaultComputedFieldGenerator(Preferences preference) {
         this(preference, preference.getComputedFields());
     }
 
@@ -44,8 +43,8 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         if (fields == null || fields.length == 0) {
             throw new IllegalArgumentException("Le tableau de ComputedField n'a pas ete initialise");
         }
-        for (int i = 0; i < fields.length; i++) {
-            computedField.put(fields[i].getName(), fields[i]);
+        for (ComputedField field : fields) {
+            computedField.put(field.getName(), field);
         }
         this.preference = preference;
     }
@@ -62,7 +61,7 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         }
 
         fieldList = determineFieldList(fileColumnGenerator);
-        if (fieldList.size() > 0) {
+        if (!fieldList.isEmpty()) {
             createComputedTable(ctxt, con, fieldList);
         }
     }
@@ -73,7 +72,7 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         if (con == null) {
             throw new IllegalArgumentException("La connexion n'a pas ete initialise");
         }
-        if (fieldList.size() > 0) {
+        if (!fieldList.isEmpty()) {
             fillComputedTableKey(ctxt, con);
             updateComputedField(ctxt, con, fieldList);
         }
@@ -83,13 +82,13 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
     /**
      * DOCUMENT ME!
      *
-     * @param ctxt      -
-     * @param con       -
-     * @param fieldList -
+     * @param ctxt   -
+     * @param con    -
+     * @param fields -
      *
      * @throws SQLException -
      */
-    protected void createComputedTable(Context ctxt, Connection con, Set fieldList)
+    protected void createComputedTable(Context ctxt, Connection con, Set fields)
           throws SQLException {
         dropComputedTable(ctxt, con);
         Statement stmt = con.createStatement();
@@ -99,7 +98,7 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         try {
             TemplateInterpreter interpreter = new TemplateInterpreter();
             interpreter.add("computedTable.name", preference.getComputedTableName());
-            interpreter.add("computedTable.fields", getComputedFieldDef(fieldList));
+            interpreter.add("computedTable.fields", getComputedFieldDef(fields));
             interpreter.addAsVariable(ctxt.getParameters());
 
             String sql = buildCreateTableQuery(interpreter, createTableQueryString);
@@ -126,11 +125,12 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
      */
     protected void dropComputedTable(Context ctxt, Connection con)
           throws SQLException {
+        String dropQuery = "drop table " + preference.getComputedTableName();
+
         TemplateInterpreter interpreter = new TemplateInterpreter();
         interpreter.add("computedTable.name", preference.getComputedTableName());
         interpreter.addAsVariable(ctxt.getParameters());
 
-        String dropQuery = "drop table " + preference.getComputedTableName();
         String sqlQuery;
         try {
             sqlQuery = interpreter.evaluate(dropQuery);
@@ -156,18 +156,18 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
     /**
      * Mise à jour des champs calcules.
      *
-     * @param ctxt      Le contexte
-     * @param con       La connexion
-     * @param fieldList Description of the Parameter
+     * @param ctxt   Le contexte
+     * @param con    La connexion
+     * @param fields Description of the Parameter
      *
      * @throws SQLException Erreur d'acces a la base de données
      */
-    protected void updateComputedField(Context ctxt, Connection con, Set fieldList)
+    protected void updateComputedField(Context ctxt, Connection con, Set fields)
           throws SQLException {
         ComputedContextAdapter adapter = new ComputedContextAdapter(preference, ctxt);
 
-        for (Iterator iter = fieldList.iterator(); iter.hasNext(); ) {
-            ComputedField field = (ComputedField)iter.next();
+        for (Object aFieldList : fields) {
+            ComputedField field = (ComputedField)aFieldList;
             field.compute(adapter, con);
         }
     }
@@ -198,19 +198,19 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
      * @throws IllegalArgumentException Nom de champ inconnue.
      */
     private Set determineFieldList(FileColumnGenerator[] fileColumnGenerator) {
-        HashSet fieldList = new HashSet();
-        for (int i = 0; i < fileColumnGenerator.length; i++) {
-            if (isComputedField(fileColumnGenerator[i])) {
-                if (isKnownComputedField(fileColumnGenerator[i])) {
-                    fieldList.add(computedField.get(fileColumnGenerator[i].getFieldInfo().getDBFieldName()));
+        Set set = new HashSet();
+        for (FileColumnGenerator aFileColumnGenerator : fileColumnGenerator) {
+            if (isComputedField(aFileColumnGenerator)) {
+                if (isKnownComputedField(aFileColumnGenerator)) {
+                    set.add(computedField.get(aFileColumnGenerator.getFieldInfo().getDBFieldName()));
                 }
                 else {
                     throw new IllegalArgumentException("Le nom du champ calcule : "
-                                                       + fileColumnGenerator[i].getFieldInfo() + " est inconnu");
+                                                       + aFileColumnGenerator.getFieldInfo() + " est inconnu");
                 }
             }
         }
-        return fieldList;
+        return set;
     }
 
 
@@ -232,10 +232,10 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
     }
 
 
-    private String getComputedFieldDef(Set fieldList) {
-        StringBuffer buffer = new StringBuffer();
-        for (Iterator iter = fieldList.iterator(); iter.hasNext(); ) {
-            ComputedField field = (ComputedField)iter.next();
+    private String getComputedFieldDef(Set fields) {
+        StringBuilder buffer = new StringBuilder();
+        for (Object aFieldList : fields) {
+            ComputedField field = (ComputedField)aFieldList;
             buffer.append(field.getSqlDefinition()).append(" null,");
         }
         return buffer.toString();
