@@ -20,7 +20,7 @@ public class SelectDateStep extends StepPanel {
 
 
     public SelectDateStep() {
-        setName("Selection de la date d'export:");
+        setName("SelectDateStep.title");
         jbInit();
         initDateField();
     }
