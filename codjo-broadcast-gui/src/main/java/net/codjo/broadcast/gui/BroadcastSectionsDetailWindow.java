@@ -4,16 +4,6 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.gui;
-import net.codjo.gui.toolkit.number.NumberField;
-import net.codjo.gui.toolkit.text.TextField;
-import net.codjo.gui.toolkit.util.ErrorDialog;
-import net.codjo.i18n.gui.TranslationNotifier;
-import net.codjo.mad.client.request.RequestException;
-import net.codjo.mad.gui.i18n.InternationalizationUtil;
-import net.codjo.mad.gui.request.DetailDataSource;
-import net.codjo.mad.gui.request.FieldType;
-import net.codjo.mad.gui.request.util.ButtonPanelLogic;
-import net.codjo.mad.gui.request.util.DetailWindowUtil;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -39,9 +29,23 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import net.codjo.gui.toolkit.number.NumberField;
+import net.codjo.gui.toolkit.text.TextField;
+import net.codjo.gui.toolkit.util.ErrorDialog;
+import net.codjo.i18n.gui.InternationalizableContainer;
+import net.codjo.i18n.gui.TranslationNotifier;
+import net.codjo.mad.client.request.RequestException;
+import net.codjo.mad.gui.framework.GuiContext;
+import net.codjo.mad.gui.i18n.InternationalizationUtil;
+import net.codjo.mad.gui.request.DetailDataSource;
+import net.codjo.mad.gui.request.FieldType;
+import net.codjo.mad.gui.request.util.ButtonPanelLogic;
+import net.codjo.mad.gui.request.util.DetailWindowUtil;
+
+import static net.codjo.mad.gui.i18n.InternationalizationUtil.translate;
 /**
  */
-public class BroadcastSectionsDetailWindow extends JInternalFrame {
+public class BroadcastSectionsDetailWindow extends JInternalFrame implements InternationalizableContainer {
     private TextField decimalSeparator = new TextField();
     private JComboBox family = new JComboBox();
     private JCheckBox fixedLength = new JCheckBox();
@@ -60,14 +64,16 @@ public class BroadcastSectionsDetailWindow extends JInternalFrame {
     private JPanel sectionPanel = new JPanel();
     private JLabel selectionNameLabel = new JLabel();
     private DetailDataSource dataSource;
+    private TranslationNotifier translationNotifier;
+    private JTabbedPane sectionTabPanel;
+    private GuiContext guiContext;
 
 
-    public BroadcastSectionsDetailWindow(DetailDataSource dataSource)
-          throws RequestException {
-        super("Fichier", true, true, true, true);
-        TranslationNotifier translationNotifier = InternationalizationUtil.retrieveTranslationNotifier(
-              dataSource.getGuiContext());
+    public BroadcastSectionsDetailWindow(DetailDataSource dataSource) throws RequestException {
+        super("", true, true, true, true);
         this.dataSource = dataSource;
+        guiContext = dataSource.getGuiContext();
+        translationNotifier = InternationalizationUtil.retrieveTranslationNotifier(guiContext);
         declareFields(dataSource);
         initFamily();
         recordLength.setEnabled(false);
@@ -79,6 +85,28 @@ public class BroadcastSectionsDetailWindow extends JInternalFrame {
         initGui();
         family.putClientProperty(FieldType.EDIT_MODE, FieldType.NOT_UPDATABLE);
         DetailWindowUtil.manageEditModeFields(dataSource);
+
+        translationNotifier.addInternationalizableContainer(this);
+    }
+
+
+    public void addInternationalizableComponents(TranslationNotifier notifier) {
+        notifier.addInternationalizableComponent(this, "BroadcastSectionsDetailWindow.title");
+        notifier.addInternationalizableComponent(columnPanel, "BroadcastSectionsDetailWindow.columnPanel.title");
+        notifier.addInternationalizableComponent(fixedLength,
+                                                 "BroadcastSectionsDetailWindow.fixedLength",
+                                                 null);
+        notifier.addInternationalizableComponent(lengthLabel, "BroadcastSectionsDetailWindow.lengthLabel");
+        notifier.addInternationalizableComponent(sectionNameLabel, "BroadcastSectionsDetailWindow.sectionNameLabel");
+        notifier.addInternationalizableComponent(familyLabel, "BroadcastSectionsDetailWindow.familyLabel");
+        notifier.addInternationalizableComponent(selectionNameLabel,
+                                                 "BroadcastSectionsDetailWindow.selectionNameLabel");
+        notifier.addInternationalizableComponent(decimalSeparatorLabel,
+                                                 "BroadcastSectionsDetailWindow.decimalSeparatorLabel");
+        notifier.addInternationalizableComponent(sectionTabPanel,
+                                                 "BroadcastSectionsDetailWindow.sectionTabPanel",
+                                                 new String[]{
+                                                       "BroadcastSectionsDetailWindow.sectionTabPanel.section"});
     }
 
 
@@ -104,7 +132,7 @@ public class BroadcastSectionsDetailWindow extends JInternalFrame {
             selectionId.setSelectedItem(selectedSelection);
         }
         catch (RequestException ex) {
-            ErrorDialog.show(this, "Impossible d'initialiser les selections", ex);
+            ErrorDialog.show(this, translate("BroadcastSectionsDetailWindow.loadErrorMessage", guiContext), ex);
         }
     }
 
@@ -137,25 +165,18 @@ public class BroadcastSectionsDetailWindow extends JInternalFrame {
 
     private void initGui() {
         this.setResizable(true);
-        this.setTitle("Détail de la table");
         this.getContentPane().setBackground(UIManager.getColor("Panel.background"));
         this.setPreferredSize(new Dimension(400, 320));
         this.getContentPane().setLayout(new GridBagLayout());
 
         columnPanel.setBorder(new TitledBorder(BorderFactory.createEtchedBorder(
               Color.white,
-              new Color(142, 142, 142)), "Colonnes"));
+              new Color(142, 142, 142)), ""));
         columnPanel.setLayout(new GridBagLayout());
 
         recordLength.setBackground(UIManager.getColor("Panel.background"));
         recordLength.setColumns(0);
-        fixedLength.setText("Longueur fixe");
         fixedLength.setHorizontalTextPosition(SwingConstants.LEFT);
-        decimalSeparatorLabel.setText("Séparateur décimal");
-        lengthLabel.setText("Longueur");
-        selectionNameLabel.setText("Sélection");
-        familyLabel.setText("Famille");
-        sectionNameLabel.setText("Nom");
         sectionName.setMaxTextLength(30);
         decimalSeparator.setColumns(2);
         decimalSeparator.setMaxTextLength(1);
@@ -208,10 +229,10 @@ public class BroadcastSectionsDetailWindow extends JInternalFrame {
                       new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.NORTH,
                                              GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.add(mainPanel, "Section");
+        sectionTabPanel = new JTabbedPane();
+        sectionTabPanel.add(mainPanel, "Section");
 
-        this.getContentPane().add(tabbedPane,
+        this.getContentPane().add(sectionTabPanel,
                                   new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTH,
                                                          GridBagConstraints.BOTH, new Insets(10, 5, 0, 5), 0,
                                                          0));

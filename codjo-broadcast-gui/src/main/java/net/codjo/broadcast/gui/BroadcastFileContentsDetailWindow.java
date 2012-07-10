@@ -41,8 +41,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
-public class BroadcastFileContentsDetailWindow extends JInternalFrame
-      implements InternationalizableContainer {
+public class BroadcastFileContentsDetailWindow extends JInternalFrame implements InternationalizableContainer {
     private JCheckBox columnHeader = new JCheckBox();
     private TextField columnSeparator = new TextField();
     private JTextField contentId = new JTextField();
