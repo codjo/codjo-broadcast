@@ -101,13 +101,14 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
             interpreter.add("computedTable.fields", getComputedFieldDef(fields));
             interpreter.addAsVariable(ctxt.getParameters());
 
-            String sql = buildCreateTableQuery(interpreter, createTableQueryString);
-            String createTableQuery = interpreter.evaluate(sql);
-            stmt.executeUpdate(createTableQuery);
-        }
-        catch (UnknownVariableException e) {
-            throw new SQLException("La requête " + createTableQueryString
-                                   + " contient des variables qui ne peuvent être interprétées", e.getMessage());
+            SqlTemplate sqlTemplate = new SqlTemplate(createTableQueryString) {
+                @Override
+                public String buildQuery(TemplateInterpreter interpret, String sqlQuery) {
+                    return buildCreateTableQuery(interpret, sqlQuery);
+                }
+            };
+
+            sqlTemplate.executeUpdate(con, interpreter);
         }
         finally {
             stmt.close();
@@ -131,24 +132,12 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         interpreter.add("computedTable.name", preference.getComputedTableName());
         interpreter.addAsVariable(ctxt.getParameters());
 
-        String sqlQuery;
+        SqlTemplate sqlTemplate = new SqlTemplate(dropQuery);
         try {
-            sqlQuery = interpreter.evaluate(dropQuery);
+            sqlTemplate.executeUpdate(con, interpreter);
         }
-        catch (UnknownVariableException e) {
-            throw new SQLException("La requête " + dropQuery
-                                   + " contient des variables qui ne peuvent être interprétées", e.getMessage());
-        }
-
-        Statement stmt = con.createStatement();
-        try {
-            stmt.executeUpdate(sqlQuery);
-        }
-        catch (SQLException error) {
-            ; // Erreur sans incidence
-        }
-        finally {
-            stmt.close();
+        catch (SQLException e) {
+            ; //Erreur sans incidence
         }
     }
 
@@ -222,13 +211,13 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
      */
     private void fillComputedTableKey(Context context, Connection con)
           throws SQLException {
-        Statement stmt = con.createStatement();
-        try {
-            stmt.executeUpdate(getFillTableKeyQuery(context));
-        }
-        finally {
-            stmt.close();
-        }
+        TemplateInterpreter interpreter = new TemplateInterpreter();
+        interpreter.add("computed.name", preference.getComputedTableName());
+        interpreter.add("selection.name", preference.getSelectionTableName());
+        interpreter.addAsVariable(context.getParameters());
+
+        new SqlTemplate("insert into $computed.name$ (SELECTION_ID) "
+                        + "select SELECTION_ID from $selection.name$").executeUpdate(con, interpreter);
     }
 
 
@@ -239,24 +228,6 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
             buffer.append(field.getSqlDefinition()).append(" null,");
         }
         return buffer.toString();
-    }
-
-
-    private String getFillTableKeyQuery(Context context) {
-        String insertDef =
-              "insert into $computed.table.name$" + " (SELECTION_ID) select SELECTION_ID"
-              + " from $selection.table.name$";
-
-        TemplateInterpreter interpreter = new TemplateInterpreter();
-        interpreter.add("computed.table.name", preference.getComputedTableName());
-        interpreter.add("selection.table.name", preference.getSelectionTableName());
-        try {
-            return context.replaceVariables(interpreter.evaluate(insertDef));
-        }
-        catch (UnknownVariableException error) {
-            throw new IllegalArgumentException("La chaine " + insertDef
-                                               + " contient des variables inconnues : " + error.getMessage());
-        }
     }
 
 
