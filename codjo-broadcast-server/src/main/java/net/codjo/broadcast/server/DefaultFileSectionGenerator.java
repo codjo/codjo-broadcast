@@ -72,9 +72,9 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
 
         TransactionManager transactionManager = new TransactionManager(connection);
         try {
+            computedField.createComputedTable(context, columns, connection);
             selector.proceed(context, connection, preference.getSelectionTableName(), today);
-
-            computedField.generateComputedTable(context, columns, connection);
+            computedField.fillComputedTable(context, connection);
             String query = queryBuilder.buildQuery(columns);
 
             int contentResult = generateContent(context, connection, query, writer);
@@ -117,18 +117,18 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
     private void cleanupTemporaryTables(Context ctxt, Connection con, java.sql.Date today)
           throws SQLException {
         try {
-            selector.cleanup(ctxt, con, preference.getSelectionTableName(), today);
+            selector.cleanup(ctxt, con, ctxt.replaceVariables(preference.getSelectionTableName()), today);
         }
         finally {
-            dropComputedTable(con);
+            dropComputedTable(con, ctxt.replaceVariables(preference.getComputedTableName()));
         }
     }
 
 
-    private void dropComputedTable(Connection connection) throws SQLException {
+    private void dropComputedTable(Connection connection, String computedTableName) throws SQLException {
         Statement statement = connection.createStatement();
         try {
-            statement.executeUpdate("drop table " + preference.getComputedTableName());
+            statement.executeUpdate("drop table " + computedTableName);
         }
         catch (SQLException ex) {
             ; // Erreur sans incidence
@@ -186,7 +186,8 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
         generateColumnHeader(writer);
         Statement statement = connection.createStatement();
         try {
-            ResultSet rs = executeQuery(statement, query);
+            String query1 = context.replaceVariables(query);
+            ResultSet rs = executeQuery(statement, query1);
             while (rs.next()) {
                 sectionLines++;
                 canWriteValue = false;

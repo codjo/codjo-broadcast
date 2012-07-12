@@ -144,6 +144,20 @@ public class ContextTest extends TestCase {
         assertEquals("le A et B", ctxt.replaceVariables("le $var.a$ et $var.b$"));
     }
 
+    /**
+     * Test que le contexte remplace correctement les parties variables récursivement.
+     */
+    public void test_replaceVariables_recursivly() {
+        Context initCtxt = new Context(params);
+
+        Map<String, Object> current = new HashMap<String, Object>();
+        current.put("concat", "$var.a$.$var.b$");
+        Context ctxt = new Context(current);
+        ctxt.connectTo(initCtxt);
+
+        assertEquals("A.B", ctxt.replaceVariables("$concat$"));
+    }
+
 
     /**
      * Teste le remplacement des variables du fichier templateFile par les valeurs appropriées.

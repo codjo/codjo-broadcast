@@ -50,7 +50,6 @@ public final class BroadcastGuiPlugin extends AbstractInternationalizableGuiPlug
     private static final String BROADCAST_FILES_PREFERENCE_ID = "BroadcastFilesWindow";
     private static final String BROADCAST_CONTENTS_PREFERENCE_ID = "BroadcastFileContentsWindow";
     private static final String WIZARD_IMAGE = "wizard.broadcast.gif";
-    private static final String WIZARD_TITLE = "Assistant Diffusion";
     private static final String WIZARD_DESCRIPTION = "Assistant diffusion manuelle";
     private static final String WIZARD_ACTION = "BroadcastWizard";
     private static final String WIZARD_ICON = "/net/codjo/broadcast/gui/wizard/broadcast.gif";
@@ -158,7 +157,7 @@ public final class BroadcastGuiPlugin extends AbstractInternationalizableGuiPlug
         String file =
               (String)guiConfiguration.getGuiContext().getProperty(BROADCAST_VTOM_PARAMETER);
         return new WizardAction(guiConfiguration.getGuiContext(),
-                                WIZARD_TITLE,
+                                "net.codjo.broadcast.gui.plugin.BroadcastGuiPlugin#BroadcastWizard",
                                 WIZARD_DESCRIPTION,
                                 new DefaultWizardBuilder(new File(file), guiConfiguration.getGuiContext()),
                                 WIZARD_ACTION,
@@ -180,18 +179,18 @@ public final class BroadcastGuiPlugin extends AbstractInternationalizableGuiPlug
 
         public Wizard createWizard() {
             FinalStep finalStep =
-                  new FinalStep("Exporter...",
+                  new FinalStep("BroadcastGuiPlugin.finalStep.title",
                                 new BroadcastVtomCaller(new CommandFile(file)),
                                 new BroadcastWizardSummaryGui(guiContext),
-                                new DefaultJobGui(guiContext, "Traitement VTOM"),
+                                new DefaultJobGui(guiContext, "BroadcastGuiPlugin.VTOMProcess"),
                                 new FinalStep.JobGuiData[]{
                                       new FinalStep.JobGuiData(
-                                            new DefaultJobGui(guiContext, "Export des données"),
+                                            new DefaultJobGui(guiContext, "BroadcastGuiPlugin.export"),
                                             new BroadcastTemplateRequestFactory())
                                 });
 
             Wizard wizard = new Wizard();
-            wizard.addStep(new BroadcastSelectionStep(getConfiguration().getWizardBroadcastSelector()));
+            wizard.addStep(new BroadcastSelectionStep(guiContext, getConfiguration().getWizardBroadcastSelector()));
             configuration.getBroadcastWizardCustomizer().customizeWizard(wizard);
             wizard.setFinalStep(finalStep);
 

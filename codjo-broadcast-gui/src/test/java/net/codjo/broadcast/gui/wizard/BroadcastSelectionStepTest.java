@@ -4,15 +4,17 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.gui.wizard;
-import net.codjo.gui.toolkit.wizard.Step;
-import net.codjo.gui.toolkit.wizard.StepPanel;
-import net.codjo.mad.client.request.MadServerFixture;
-import net.codjo.test.common.LogString;
-import net.codjo.workflow.gui.wizard.WizardConstants;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.Map;
+import net.codjo.broadcast.gui.BroadcastGuiContext;
+import net.codjo.gui.toolkit.wizard.Step;
+import net.codjo.gui.toolkit.wizard.StepPanel;
+import net.codjo.mad.client.request.MadServerFixture;
+import net.codjo.mad.gui.i18n.InternationalizationUtil;
+import net.codjo.test.common.LogString;
+import net.codjo.workflow.gui.wizard.WizardConstants;
 import org.uispec4j.ComboBox;
 import org.uispec4j.Panel;
 import org.uispec4j.UISpecTestCase;
@@ -22,15 +24,17 @@ import org.uispec4j.UISpecTestCase;
 public class BroadcastSelectionStepTest extends UISpecTestCase {
     private MadServerFixture madServerFixture = new MadServerFixture();
     private LogString log = new LogString();
+    private BroadcastGuiContext guiContext;
 
 
     public void test_noSubStep() throws Exception {
         BroadcastSelectionStep step
-              = new BroadcastSelectionStep(new DefaultBroadcastSelector(madServerFixture.getOperations(),
+              = new BroadcastSelectionStep(guiContext,
+                                           new DefaultBroadcastSelector(madServerFixture.getOperations(),
                                                                         "selectAllBroadcastFiles"));
         Panel panel = new Panel(step);
 
-        assertEquals("Selection du type d'export:", step.getName());
+        assertEquals("Sélection du type d'export :", InternationalizationUtil.translate(step.getName(), guiContext));
 
         mockStart(step);
 
@@ -49,7 +53,8 @@ public class BroadcastSelectionStepTest extends UISpecTestCase {
     public void test_oneSubStep() throws Exception {
         StepPanelMock subStep = new StepPanelMock(new LogString("sub", log));
         subStep.setName("hahaa");
-        BroadcastSelectionStep step = new BroadcastSelectionStep(subStep,
+        BroadcastSelectionStep step = new BroadcastSelectionStep(guiContext,
+                                                                 subStep,
                                                                  new DefaultBroadcastSelector(madServerFixture.getOperations(),
                                                                                               "selectAllBroadcastFiles"));
         Panel panel = new Panel(step);
@@ -91,7 +96,8 @@ public class BroadcastSelectionStepTest extends UISpecTestCase {
 
     public void test_event() throws Exception {
         BroadcastSelectionStep step
-              = new BroadcastSelectionStep(new DefaultBroadcastSelector(madServerFixture.getOperations(),
+              = new BroadcastSelectionStep(guiContext,
+                                           new DefaultBroadcastSelector(madServerFixture.getOperations(),
                                                                         "selectAllBroadcastFiles"));
         Panel panel = new Panel(step);
 
@@ -115,6 +121,7 @@ public class BroadcastSelectionStepTest extends UISpecTestCase {
     @Override
     protected void setUp() throws Exception {
         madServerFixture.doSetUp();
+        guiContext = new BroadcastGuiContext();
     }
 
 

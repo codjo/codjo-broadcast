@@ -27,7 +27,7 @@ public class SelectTypeStep extends StepPanel {
 
     public SelectTypeStep(BroadcastSelector selector) {
         this.selector = selector;
-        setName("Selection du type d'export:");
+        setName("BroadcastSelectionStep.title");
         jbInit();
     }
 

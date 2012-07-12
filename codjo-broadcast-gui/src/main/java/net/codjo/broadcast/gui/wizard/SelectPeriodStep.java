@@ -24,7 +24,7 @@ public class SelectPeriodStep extends StepPanel {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
 
     public SelectPeriodStep() {
-        setName("Selection de la période d'export:");
+        setName("SelectPeriodStep.title");
         jbInit();
         initPeriodField();
         setValue(BROADCAST_DATE, new Date());
