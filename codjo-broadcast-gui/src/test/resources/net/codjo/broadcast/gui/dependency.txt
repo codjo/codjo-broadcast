@@ -41,6 +41,7 @@ net.codjo.broadcast.gui.selector
 	-> net.codjo.mad.gui.request.factory
 	-> net.codjo.mad.gui.request.util
 net.codjo.broadcast.gui.wizard
+	-> net.codjo.i18n.common
 	-> net.codjo.i18n.gui
 	-> net.codjo.mad.gui.i18n
 	-> net.codjo.mad.gui.framework
