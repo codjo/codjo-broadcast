@@ -28,7 +28,6 @@ public abstract class ComputedFieldTestCase<C extends ComputedField, P extends P
     protected abstract void createSelectionTable() throws SQLException;
 
 
-    //TODO[Segolene][a valider] - methode modifiée pour ajouter le transaction manager
     protected void assertCase(final String storyName) throws Exception {
         final Connection connection = tokio.getConnection();
         TransactionManager<Void> transactionManager = new TransactionManager<Void>(connection) {
@@ -50,9 +49,9 @@ public abstract class ComputedFieldTestCase<C extends ComputedField, P extends P
     }
 
 
-    //TODO[Segolene][a corriger] - surchargé dans codjo-sample parce que numeric ne fonctionne pas sur oracle
     protected void createComputedTable() {
-        tokio.getJdbcFixture().create(SqlTable.table(preferences.getComputedTableName()),
+        final String computedTableName = context.replaceVariables(preferences.getComputedTableName());
+        tokio.getJdbcFixture().create(SqlTable.temporaryTable(computedTableName),
                                       "SELECTION_ID numeric(18) not null, "
                                       + computedField.getSqlDefinition() + " null ");
     }

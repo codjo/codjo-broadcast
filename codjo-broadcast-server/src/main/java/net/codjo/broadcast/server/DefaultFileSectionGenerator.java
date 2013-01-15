@@ -69,7 +69,6 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
     public int generate(final Context context, final Connection connection, final PrintWriter writer)
           throws IOException, SQLException, BroadcastException {
         final java.sql.Date today = context.getToday();
-        //TODO[segolene][a valider] - remplacement de la inner class TransactionManager par celle de database
         final TransactionManager<Integer> transactionManager = new TransactionManager<Integer>(connection) {
             @Override
             protected Integer runSql(Connection connection) throws Exception {

@@ -44,7 +44,7 @@ public abstract class AbstractDependencyTestCase extends TestCase {
      * @param currentPackage Le package a verifier (ex : "net.codjo.orbis")
      * @param dependsUpon    Tableau de package.
      *
-     * @throws IllegalArgumentException TODO
+     * @throws IllegalArgumentException
      */
     protected void assertDependency(String currentPackage, String[] dependsUpon) {
         jdepend.analyze();

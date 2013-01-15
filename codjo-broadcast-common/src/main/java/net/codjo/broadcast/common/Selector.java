@@ -39,7 +39,7 @@ public interface Selector {
      * @param table nom de la table temporaire
      * @param today date du jour
      *
-     * @throws SQLException TODO
+     * @throws SQLException
      *
      * @since 2.01
      */

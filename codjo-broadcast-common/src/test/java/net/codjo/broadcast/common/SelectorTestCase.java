@@ -3,10 +3,8 @@ import java.sql.Connection;
 import java.sql.Date;
 import net.codjo.database.common.api.TransactionManager;
 import net.codjo.tokio.TokioTestCase;
-/**
- * TODO[segolene][a valider]
- */
-public class SelectorTestCase extends TokioTestCase {
+
+public abstract class SelectorTestCase extends TokioTestCase {
 
     public void assertProceed(Selector selector,
                               final String tempTableName,
