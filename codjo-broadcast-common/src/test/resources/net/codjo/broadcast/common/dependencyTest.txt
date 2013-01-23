@@ -2,9 +2,11 @@ net.codjo.broadcast.common
 	-> net.codjo.broadcast.common.columns
 	-> net.codjo.broadcast.common.computed
 	-> net.codjo.broadcast.common.diffuser
+	-> net.codjo.database.common.api
 	-> net.codjo.sql.builder
 	-> net.codjo.test.common
 	-> net.codjo.test.common.mock
+	-> net.codjo.tokio
 net.codjo.broadcast.common.columns
 	-> net.codjo.sql.builder
 	-> fakedb
