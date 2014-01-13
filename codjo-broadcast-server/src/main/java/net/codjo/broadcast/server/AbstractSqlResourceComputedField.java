@@ -1,6 +1,6 @@
 package net.codjo.broadcast.server;
-import java.sql.SQLException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import net.codjo.broadcast.common.computed.AbstractComputedField;
 import net.codjo.broadcast.common.computed.ComputedContext;
@@ -15,7 +15,7 @@ public abstract class AbstractSqlResourceComputedField extends AbstractComputedF
 
 
     protected String loadQuery(String queryName) throws SQLException {
-        return SqlUtil.loadQuery(getClass().getResource(queryName));
+        return SqlUtil.loadQuery(this, queryName);
     }
 
 

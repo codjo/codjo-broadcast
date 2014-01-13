@@ -17,7 +17,27 @@ public class SqlUtil {
     }
 
 
+    public static String loadQuery(Object requestor, String queryName) throws SQLException {
+        if (requestor == null) {
+            throw new NullPointerException("requestor parameter is null");
+        }
+        if (queryName == null) {
+            throw new NullPointerException("queryName parameter is null");
+        }
+
+        URL url = requestor.getClass().getResource(queryName);
+        if (url == null) {
+            throw new IllegalArgumentException("Can't find resource '" + queryName + "'");
+        }
+
+        return loadQuery(url);
+    }
+
+
     public static String loadQuery(URL url) throws SQLException {
+        if (url == null) {
+            throw new NullPointerException("url parameter is null");
+        }
         try {
             return FileUtil.loadContent(url);
         }
