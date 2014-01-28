@@ -11,20 +11,22 @@ import java.sql.SQLException;
  *
  * @author $Author: gonnot $
  * @version $Revision: 1.1.1.1 $
- *
  * @see ComputedContext.getComputedTableName
  */
 public interface ComputedField {
+    public static final String WARNINGS = "WARNINGS";
+
+
     /**
      * Mise a jour du champ.
      *
      * @param ctxt Le contexte d'execution
-     * @param con La connexion
+     * @param con  La connexion
      *
-     * @exception SQLException Erreur d'acces a la base de donnees
+     * @throws SQLException Erreur d'acces a la base de donnees
      */
     public void compute(ComputedContext ctxt, Connection con)
-            throws SQLException;
+          throws SQLException;
 
 
     /**

@@ -4,14 +4,6 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.server;
-import net.codjo.broadcast.common.Broadcaster;
-import net.codjo.broadcast.common.ConnectionProvider;
-import net.codjo.broadcast.common.Context;
-import net.codjo.broadcast.common.PostBroadcaster;
-import net.codjo.broadcast.common.Preferences;
-import net.codjo.broadcast.common.PreferencesManager;
-import net.codjo.broadcast.common.columns.FileColumnGenerator;
-import net.codjo.broadcast.common.diffuser.Diffuser;
 import java.io.File;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -21,6 +13,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import net.codjo.broadcast.common.Broadcaster;
+import net.codjo.broadcast.common.ConnectionProvider;
+import net.codjo.broadcast.common.Context;
+import net.codjo.broadcast.common.PostBroadcaster;
+import net.codjo.broadcast.common.Preferences;
+import net.codjo.broadcast.common.PreferencesManager;
+import net.codjo.broadcast.common.columns.FileColumnGenerator;
+import net.codjo.broadcast.common.diffuser.Diffuser;
 /**
  * Maison mère des <code>Broadcaster</code>.
  */
@@ -77,8 +77,8 @@ public class BroadcasterHome {
 
 
     /**
-     * Retourne tous les broadcaster pour un nom de fichier. NB : les noms de fichiers peuvent contenir des
-     * variables definies dans le Context.
+     * Retourne tous les broadcaster pour un nom de fichier. NB : les noms de fichiers peuvent contenir des variables
+     * definies dans le Context.
      *
      * @param fileName Le nom de fichier
      *
@@ -166,7 +166,7 @@ public class BroadcasterHome {
     private Broadcaster[] buildAllBroadcaster(String query, String argument, Context context)
           throws SQLException {
         if (query == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("query parameter is null");
         }
         List<Broadcaster> allBroadcaster = new ArrayList<Broadcaster>();
 

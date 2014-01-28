@@ -4,16 +4,17 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.common;
-import net.codjo.broadcast.common.diffuser.Diffuser;
-import net.codjo.test.common.LogString;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import net.codjo.broadcast.common.diffuser.Diffuser;
+import net.codjo.test.common.LogString;
 /**
  *
  */
 public class BroadcasterMock implements Broadcaster {
     private LogString logString;
+    private String warnings;
 
 
     public BroadcasterMock(LogString logString) {
@@ -34,6 +35,10 @@ public class BroadcasterMock implements Broadcaster {
     public void broadcast(Context currentContext)
           throws IOException, SQLException, BroadcastException {
         logString.call("broadcast", currentContext.getParameters());
+
+        if (warnings != null) {
+            currentContext.addWarning(warnings);
+        }
     }
 
 
@@ -43,5 +48,10 @@ public class BroadcasterMock implements Broadcaster {
 
     public Diffuser getDiffuser() {
         return null;
+    }
+
+
+    public void mockWarnings(String warnings) {
+        this.warnings = warnings;
     }
 }

@@ -4,6 +4,11 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.server.plugin;
+import java.io.File;
+import java.sql.SQLException;
+import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
 import net.codjo.agent.AclMessage;
 import net.codjo.agent.Agent;
 import net.codjo.agent.Aid;
@@ -17,12 +22,8 @@ import net.codjo.broadcast.common.Context;
 import net.codjo.broadcast.common.message.BroadcastRequest;
 import net.codjo.test.common.LogString;
 import net.codjo.workflow.common.message.JobAudit;
+import net.codjo.workflow.common.message.JobAudit.Status;
 import net.codjo.workflow.common.protocol.JobProtocol;
-import java.io.File;
-import java.sql.SQLException;
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
 /**
  * Classe de test de {@link BroadcastJobAgent}.
  */
@@ -34,8 +35,22 @@ public class BroadcastJobAgentTest extends TestCase {
     private JobConfigMock jobConfig;
 
 
+    public void test_broadcast_warnings() throws Exception {
+        test_broadcast(true, "warnings");
+    }
+
+
     public void test_broadcast() throws Exception {
+        test_broadcast(false, null);
+    }
+
+
+    private void test_broadcast(boolean withWarnings, String warnings) throws Exception {
         agentContainerFixture.startNewAgent(BROADCAST_AID, broadcastAgent);
+
+        if (withWarnings) {
+            jobConfig.mockWarnings(warnings);
+        }
 
         AclMessage broadcastMessage = createBroadcastRequest("r24",
                                                              "2006-01-01",
@@ -46,7 +61,10 @@ public class BroadcastJobAgentTest extends TestCase {
         tester.record().sendMessage(broadcastMessage);
         tester.record().receiveMessage(hasAuditType(JobAudit.Type.PRE));
         tester.record().receiveMessage(hasAuditType(JobAudit.Type.POST))
-              .add(new AssertAuditArguments("destfolder\\result.txt")).die();
+              .add(new AssertAuditArguments("destfolder\\result.txt",
+                                            withWarnings,
+                                            "Warnings durant l'export de result.txt",
+                                            warnings)).die();
 
         runAndAssertNoError(tester);
 
@@ -197,11 +215,20 @@ public class BroadcastJobAgentTest extends TestCase {
 
 
     private static class AssertAuditArguments implements SubStep {
-        private String expected;
+        private final String expected;
+        private final boolean withWarnings;
+        private final String warningMessage;
+        private final String warningDescription;
 
 
-        AssertAuditArguments(String expectedResultFile) {
+        AssertAuditArguments(String expectedResultFile,
+                             boolean withWarnings,
+                             String expectedWarningMessage,
+                             String expectedWarningDescription) {
             expected = expectedResultFile;
+            this.withWarnings = withWarnings;
+            warningMessage = expectedWarningMessage;
+            warningDescription = expectedWarningDescription;
         }
 
 
@@ -211,6 +238,12 @@ public class BroadcastJobAgentTest extends TestCase {
             Assert.assertNotNull(audit.getArguments());
             Assert.assertEquals(expected,
                                 audit.getArguments().get(BroadcastJobAgent.RESULT_FILE));
+
+            if (withWarnings) {
+                Assert.assertEquals("wrong status", Status.WARNING, audit.getStatus());
+                Assert.assertEquals("wrong description", warningDescription, audit.getWarning().getDescription());
+                Assert.assertEquals("wrong message", warningMessage, audit.getWarningMessage());
+            }
         }
     }
 }

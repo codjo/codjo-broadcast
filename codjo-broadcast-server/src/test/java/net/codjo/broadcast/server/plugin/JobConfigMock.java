@@ -4,16 +4,16 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.server.plugin;
+import java.io.File;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import net.codjo.agent.AclMessage;
 import net.codjo.agent.Agent;
 import net.codjo.broadcast.common.Broadcaster;
 import net.codjo.broadcast.common.BroadcasterMock;
 import net.codjo.broadcast.common.Context;
 import net.codjo.test.common.LogString;
-import java.io.File;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 /**
  * Classe de mock de {@link JobConfig}.
  */
@@ -66,5 +66,14 @@ class JobConfigMock implements JobConfig {
 
     public void mockGetBroadcastersForFailure(SQLException error) {
         getBroadcastersForFailure = error;
+    }
+
+
+    public void mockWarnings(String warnings) {
+        for (Broadcaster b : broadcasters) {
+            if (b instanceof BroadcasterMock) {
+                ((BroadcasterMock)b).mockWarnings(warnings);
+            }
+        }
     }
 }

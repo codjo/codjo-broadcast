@@ -4,18 +4,19 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.server.plugin;
+import java.io.File;
+import java.sql.SQLException;
 import net.codjo.agent.DFService;
 import net.codjo.broadcast.common.Broadcaster;
 import net.codjo.broadcast.common.Context;
 import net.codjo.broadcast.common.message.BroadcastRequest;
 import net.codjo.workflow.common.message.Arguments;
 import net.codjo.workflow.common.message.JobAudit;
+import net.codjo.workflow.common.message.JobAudit.Anomaly;
 import net.codjo.workflow.common.message.JobException;
 import net.codjo.workflow.common.message.JobRequest;
 import net.codjo.workflow.common.protocol.JobProtocolParticipant;
 import net.codjo.workflow.server.api.JobAgent;
-import java.io.File;
-import java.sql.SQLException;
 /**
  *
  */
@@ -38,6 +39,7 @@ class BroadcastJobAgent extends JobAgent {
 
     private static class BroadcastParticipant extends JobProtocolParticipant {
         private final JobConfig jobConfig;
+        private Anomaly anomaly;
 
 
         BroadcastParticipant(JobConfig jobConfig) {
@@ -69,6 +71,12 @@ class BroadcastJobAgent extends JobAgent {
                 broadcaster.setDestinationFile(destinationFile);
 
                 broadcaster.broadcast(context);
+
+                if (context.getWarnings() != null) {
+                    anomaly = new Anomaly(
+                          String.format("Warnings durant l'export de %s", destinationFile.getName()),
+                          context.getWarnings());
+                }
             }
             catch (JobException exception) {
                 throw exception;
@@ -103,6 +111,10 @@ class BroadcastJobAgent extends JobAgent {
                 BroadcastRequest request = new BroadcastRequest(jobRequest);
                 audit.setArguments(new Arguments(RESULT_FILE,
                                                  request.getDestinationFile().getPath()));
+
+                if (anomaly != null) {
+                    audit.setWarning(anomaly);
+                }
             }
             sendAudit(audit);
         }
