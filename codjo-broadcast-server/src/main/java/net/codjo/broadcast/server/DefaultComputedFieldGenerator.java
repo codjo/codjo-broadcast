@@ -19,6 +19,7 @@ import net.codjo.broadcast.common.columns.FileColumnGenerator;
 import net.codjo.broadcast.common.computed.ComputedField;
 import net.codjo.database.common.api.DatabaseFactory;
 import net.codjo.database.common.api.DatabaseQueryHelper;
+import net.codjo.database.common.api.confidential.DatabaseTranscoder;
 import net.codjo.database.common.api.structure.SqlTable;
 import net.codjo.variable.TemplateInterpreter;
 import net.codjo.variable.UnknownVariableException;
@@ -100,13 +101,15 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         dropComputedTable(ctxt, con);
         Statement stmt = con.createStatement();
         String createTableQueryString = "SELECTION_ID numeric(18) not null, "
-                                        + ComputedField.WARNINGS + " CLOB null, "
+                                        + "$warningsField$ $warningsFieldType$ null, "
                                         + " $computedTable.fields$"
                                         + " constraint PK_TMP_COMPUTED primary key (SELECTION_ID)";
         try {
             TemplateInterpreter interpreter = new TemplateInterpreter();
             interpreter.add("computedTable.name", preference.getComputedTableName());
             interpreter.add("computedTable.fields", getComputedFieldDef(fields));
+            interpreter.add("warningsField", ComputedField.WARNINGS);
+            interpreter.add("warningsFieldType", getClobType());
             interpreter.addAsVariable(ctxt.getParameters());
 
             SqlTemplate sqlTemplate = new SqlTemplate(createTableQueryString) {
@@ -121,6 +124,11 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         finally {
             stmt.close();
         }
+    }
+
+
+    private String getClobType() {
+        return new DatabaseFactory().createDatabaseTranscoder().transcodeSqlFieldType(DatabaseTranscoder.LONGVARCHAR);
     }
 
 

@@ -86,7 +86,7 @@ public class DefaultComputedFieldGeneratorTest {
             // Note : the order of push is the reverse of expected order
             FakeDriver.getDriver()
                   .pushUpdateConstraint("create table #" + computedTableName + " ( SELECTION_ID numeric(18) not null, "
-                                        + ComputedField.WARNINGS + " CLOB null,  "
+                                        + ComputedField.WARNINGS + " text null,  "
                                         + fieldDef + " null, "
                                         + "constraint PK_TMP_COMPUTED primary key (SELECTION_ID) )");
             FakeDriver.getDriver().pushUpdateConstraint("drop table " + computedTableName);

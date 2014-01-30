@@ -2,13 +2,11 @@ package net.codjo.broadcast.server;
 import fakedb.FakeDriver;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.sql.rowset.serial.SerialClob;
 import junit.framework.TestCase;
 import net.codjo.broadcast.common.ComputedFieldGenerator;
 import net.codjo.broadcast.common.Context;
@@ -302,7 +300,7 @@ public class DefaultFileSectionGeneratorTest extends TestCase {
             rs2[0] = new Object[]{ComputedField.WARNINGS};
             int i = 1;
             for (String warning : warnings) {
-                rs2[i] = new Object[]{clob(warning)};
+                rs2[i] = new Object[]{warning};
                 i++;
             }
             FakeDriver.getDriver().pushResultSet(rs2, sql);
@@ -389,10 +387,5 @@ public class DefaultFileSectionGeneratorTest extends TestCase {
             hasBeenCalled = true;
             return "select * from " + preference.getSelectionTableName();
         }
-    }
-
-
-    public static Clob clob(String s) throws SQLException {
-        return new SerialClob(s.toCharArray());
     }
 }

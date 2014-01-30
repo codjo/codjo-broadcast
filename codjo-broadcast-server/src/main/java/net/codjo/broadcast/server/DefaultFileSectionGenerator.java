@@ -6,7 +6,6 @@
 package net.codjo.broadcast.server;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -109,9 +108,9 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
         try {
             rs = s.executeQuery();
             while (rs.next()) {
-                Clob warningsClob = rs.getClob(ComputedField.WARNINGS);
-                if (warningsClob != null) {
-                    context.addWarning(warningsClob.getSubString(1L, (int)warningsClob.length()));
+                String warningsStr = rs.getString(ComputedField.WARNINGS);
+                if (warningsStr != null) {
+                    context.addWarning(warningsStr);
                 }
             }
         }
