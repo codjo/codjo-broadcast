@@ -1,6 +1,8 @@
 net.codjo.broadcast.server
+	-> fakedb
 	-> net.codjo.broadcast.common
 	-> net.codjo.broadcast.common.columns
+	-> net.codjo.broadcast.common.computed
 	-> net.codjo.broadcast.common.diffuser
 	-> net.codjo.database.common.api
 	-> net.codjo.datagen
@@ -8,7 +10,6 @@ net.codjo.broadcast.server
 	-> net.codjo.test.common
 	-> net.codjo.test.common.fixture
 	-> net.codjo.test.common.mock
-	-> fakedb
 net.codjo.broadcast.server.api
 	-> net.codjo.broadcast.common
 

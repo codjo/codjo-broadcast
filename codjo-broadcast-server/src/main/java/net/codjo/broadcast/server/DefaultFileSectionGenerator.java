@@ -7,6 +7,7 @@ package net.codjo.broadcast.server;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,6 +20,7 @@ import net.codjo.broadcast.common.Preferences;
 import net.codjo.broadcast.common.Selector;
 import net.codjo.broadcast.common.columns.FileColumnGenerator;
 import net.codjo.broadcast.common.columns.GenerationException;
+import net.codjo.broadcast.common.computed.ComputedField;
 import net.codjo.database.common.api.TransactionManager;
 import org.apache.log4j.Logger;
 /**
@@ -77,6 +79,10 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
                 computedField.fillComputedTable(context, connection);
                 String query = queryBuilder.buildQuery(columns);
 
+                if (context.getComputedTableWasCreated()) {
+                    addWarnings(context, connection);
+                }
+
                 return generateContent(context, connection, query, writer);
             }
         };
@@ -89,6 +95,30 @@ class DefaultFileSectionGenerator implements FileSectionGenerator {
         }
         finally {
             cleanupTemporaryTables(context, connection, today);
+        }
+    }
+
+
+    private void addWarnings(Context context, Connection connection) throws SQLException {
+        String sql = "select " + ComputedField.WARNINGS + " from " + preference.getComputedTableName();
+        sql = context.replaceVariables(sql);
+
+        PreparedStatement s = connection.prepareStatement(sql);
+        ResultSet rs = null;
+        try {
+            rs = s.executeQuery();
+            while (rs.next()) {
+                String warningsStr = rs.getString(ComputedField.WARNINGS);
+                if (warningsStr != null) {
+                    context.addWarning(warningsStr);
+                }
+            }
+        }
+        finally {
+            if (rs != null) {
+                rs.close();
+            }
+            s.close();
         }
     }
 

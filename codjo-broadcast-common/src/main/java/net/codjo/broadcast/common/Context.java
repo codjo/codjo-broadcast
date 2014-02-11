@@ -4,25 +4,29 @@
  * Common Apache License 2.0
  */
 package net.codjo.broadcast.common;
-import net.codjo.variable.TemplateInterpreter;
-import net.codjo.variable.UnknownVariableException;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import net.codjo.variable.TemplateInterpreter;
+import net.codjo.variable.UnknownVariableException;
 /**
  * Contexte d'une diffusion.
  *
  * <p> Un contexte contient la definition de variable. </p>
  *
- * <p> Les variables definit lors de la construction du contexte sont considéré comme immutable (la methode
- * put refusera leurs redefinition). </p>
+ * <p> Les variables definit lors de la construction du contexte sont considéré comme immutable (la methode put refusera
+ * leurs redefinition). </p>
  */
 public class Context {
     private Map<String, Object> immutableParameters = new HashMap<String, Object>();
     private Map<String, Object> parameters = new HashMap<String, Object>();
     private java.sql.Date forceToday = null;
     private Context subContext = null;
+    private List<String> warnings;
+    private boolean computedTableWasCreated;
 
 
     public Context() {
@@ -70,8 +74,6 @@ public class Context {
     /**
      * Retourne la valeur du parametre. Si le parametre est indefini une exception est levee.
      *
-     * @param parameterName
-     *
      * @return la valeur du parametre
      *
      * @throws NoSuchElementException Parametre inconnu
@@ -89,8 +91,8 @@ public class Context {
     /**
      * Retourne les parametres de ce contexte (+ les parametres du sous-contexte).
      *
-     * @return une map de parametres : clef = nom du parametres / valeur = valeur du parametre (pas forcement
-     *         une string)
+     * @return une map de parametres : clef = nom du parametres / valeur = valeur du parametre (pas forcement une
+     *         string)
      */
     public Map<String, Object> getParameters() {
         Map<String, Object> params = new HashMap<String, Object>();
@@ -142,8 +144,6 @@ public class Context {
     /**
      * Remplace les variables du fichier <code>templateFile</code> par leurs valeurs.
      *
-     * @param templateFile
-     *
      * @return le fichier converti
      */
     public File replaceVariables(File templateFile) {
@@ -153,8 +153,6 @@ public class Context {
 
     /**
      * Remplace les variables de la String <code>template</code> par leurs valeurs.
-     *
-     * @param template
      *
      * @return le template instancie
      *
@@ -170,5 +168,50 @@ public class Context {
             throw new IllegalArgumentException("La string >" + template
                                                + "< contient des variables inconnues : " + ex.getMessage());
         }
+    }
+
+
+    public void addWarning(String warning) {
+        if (warnings == null) {
+            warnings = new ArrayList<String>();
+        }
+
+        // a given computed field might report the same warning multiple times
+        // if it's used by multiple sections of the same exported file
+        // => we must avoid reporting warning more than once
+        if (!warnings.contains(warning)) {
+            warnings.add(warning);
+        }
+    }
+
+
+    public String getWarnings() {
+        if (warnings == null) {
+            return null;
+        }
+
+        StringBuilder result = new StringBuilder();
+        String lineSeparator = System.getProperty("line.separator");
+        boolean first = true;
+        for (String warning : warnings) {
+            if (!first) {
+                result.append(lineSeparator);
+            }
+            first = false;
+
+            result.append(warning);
+        }
+
+        return result.toString();
+    }
+
+
+    public void setComputedTableWasCreated(boolean computedTableWasCreated) {
+        this.computedTableWasCreated = computedTableWasCreated;
+    }
+
+
+    public boolean getComputedTableWasCreated() {
+        return computedTableWasCreated;
     }
 }

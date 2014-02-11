@@ -45,7 +45,7 @@ public abstract class AbstractSelector implements Selector {
 
 
     protected String loadQuery(String queryName) throws SQLException {
-        return SqlUtil.loadQuery(getClass().getResource(queryName));
+        return SqlUtil.loadQuery(this, queryName);
     }
 
 

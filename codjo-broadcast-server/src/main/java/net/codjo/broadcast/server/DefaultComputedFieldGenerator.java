@@ -19,9 +19,12 @@ import net.codjo.broadcast.common.columns.FileColumnGenerator;
 import net.codjo.broadcast.common.computed.ComputedField;
 import net.codjo.database.common.api.DatabaseFactory;
 import net.codjo.database.common.api.DatabaseQueryHelper;
+import net.codjo.database.common.api.confidential.DatabaseTranscoder;
 import net.codjo.database.common.api.structure.SqlTable;
 import net.codjo.variable.TemplateInterpreter;
 import net.codjo.variable.UnknownVariableException;
+
+import static net.codjo.broadcast.common.computed.ComputedField.WARNINGS;
 /**
  * DOCUMENT ME!
  *
@@ -44,6 +47,9 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
             throw new IllegalArgumentException("Le tableau de ComputedField n'a pas ete initialise");
         }
         for (ComputedField field : fields) {
+            if (WARNINGS.equals(field.getName())) {
+                throw new IllegalArgumentException(WARNINGS + " is a reserved column name");
+            }
             computedField.put(field.getName(), field);
         }
         this.preference = preference;
@@ -61,8 +67,10 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         }
 
         fieldList = determineFieldList(fileColumnGenerator);
+        ctxt.setComputedTableWasCreated(false);
         if (!fieldList.isEmpty()) {
             createComputedTable(ctxt, con, fieldList);
+            ctxt.setComputedTableWasCreated(true);
         }
     }
 
@@ -93,12 +101,15 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         dropComputedTable(ctxt, con);
         Statement stmt = con.createStatement();
         String createTableQueryString = "SELECTION_ID numeric(18) not null, "
+                                        + "$warningsField$ $warningsFieldType$ null, "
                                         + " $computedTable.fields$"
                                         + " constraint PK_TMP_COMPUTED primary key (SELECTION_ID)";
         try {
             TemplateInterpreter interpreter = new TemplateInterpreter();
             interpreter.add("computedTable.name", preference.getComputedTableName());
             interpreter.add("computedTable.fields", getComputedFieldDef(fields));
+            interpreter.add("warningsField", ComputedField.WARNINGS);
+            interpreter.add("warningsFieldType", getClobType());
             interpreter.addAsVariable(ctxt.getParameters());
 
             SqlTemplate sqlTemplate = new SqlTemplate(createTableQueryString) {
@@ -113,6 +124,11 @@ class DefaultComputedFieldGenerator implements ComputedFieldGenerator {
         finally {
             stmt.close();
         }
+    }
+
+
+    private String getClobType() {
+        return new DatabaseFactory().createDatabaseTranscoder().transcodeSqlFieldType(DatabaseTranscoder.LONGVARCHAR);
     }
 
 
