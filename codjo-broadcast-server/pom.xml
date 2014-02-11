@@ -10,7 +10,7 @@
     <parent>
         <groupId>net.codjo.broadcast</groupId>
         <artifactId>codjo-broadcast</artifactId>
-        <version>6.57</version>
+        <version>6.58-SNAPSHOT</version>
     </parent>
     <dependencies>
         <dependency>
